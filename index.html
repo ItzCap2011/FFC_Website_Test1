@@ -1,0 +1,2860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Founders Challenge — Developing Thinkers. Creating Founders.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── CSS VARIABLES ─── */
+:root {
+  --navy:        #0c1931;
+  --navy-mid:    #152540;
+  --royal:       #1a3d7c;
+  --royal-light: #2452a0;
+  --accent:      #111827;
+  --accent-mid:  #1a3d7c;
+  --accent-lt:   #4a80d4;
+  --offwhite:    #f0efeb;
+  --grey-lt:     #e4e4e0;
+  --grey-mid:    #c0bfba;
+  --grey-dark:   #6b6b66;
+  --ink:         #0f1c2e;
+  --white:       #ffffff;
+  --gold:        #c9a84c;
+
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-serif:   'Cormorant Garamond', serif;
+  --font-body:    'Open Sans', sans-serif;
+
+  --radius: 2px;
+  --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  background: var(--offwhite);
+  color: var(--ink);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+button { cursor: pointer; border: none; background: none; }
+
+/* ─── PAGE SYSTEM ─── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ─── NAVIGATION ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(12, 25, 49, 0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  transition: var(--transition);
+}
+.nav-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+.nav-logo-mark {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.nav-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+.nav-logo-text span:first-child {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1;
+}
+.nav-logo-text span:last-child {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--grey-mid);
+  line-height: 1;
+  margin-top: 3px;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-link {
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: color var(--transition);
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 4px; left: 16px; right: 16px;
+  height: 1px;
+  background: var(--accent-lt);
+  transform: scaleX(0);
+  transition: transform var(--transition);
+}
+.nav-link:hover, .nav-link.active { color: white; }
+.nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+.nav-dropdown {
+  position: relative;
+}
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: var(--navy-mid);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: 2px solid var(--royal-light);
+  width: 210px;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--transition);
+}
+.nav-dropdown:hover .nav-dropdown-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.nav-dropdown-item {
+  display: block;
+  padding: 13px 20px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  transition: all var(--transition);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.nav-dropdown-item:hover {
+  color: white;
+  background: rgba(74,128,212,0.12);
+  padding-left: 26px;
+}
+.nav-cta {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: white;
+  background: var(--accent);
+  padding: 10px 22px;
+  transition: background var(--transition);
+}
+.nav-cta:hover { background: var(--accent-mid); }
+
+/* Mobile nav toggle */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+}
+.nav-hamburger span {
+  width: 22px;
+  height: 2px;
+  background: white;
+  transition: var(--transition);
+}
+
+/* ─── SCROLL ANIMATIONS ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ─── SHARED SECTION STYLES ─── */
+.section-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--royal-light);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-label::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--royal-light);
+  flex-shrink: 0;
+}
+.section-label.light { color: rgba(255,255,255,0.5); }
+.section-label.light::before { background: rgba(255,255,255,0.3); }
+
+.section-heading {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(38px, 6vw, 72px);
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  color: var(--navy);
+}
+.section-heading.light { color: var(--white); }
+
+.editorial-heading {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(26px, 3.5vw, 44px);
+  line-height: 1.15;
+  color: var(--navy);
+}
+.editorial-heading.light { color: var(--white); }
+
+.body-text {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--grey-dark);
+  font-weight: 400;
+}
+.body-text.light { color: rgba(255,255,255,0.65); }
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--grey-lt);
+  margin: 60px 0;
+}
+.divider.dark { background: rgba(255,255,255,0.08); }
+
+.container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ─── BUTTONS ─── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: white;
+  background: var(--accent);
+  padding: 16px 32px;
+  cursor: pointer;
+  transition: all var(--transition);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--royal-light);
+  transform: translateX(-101%);
+  transition: transform var(--transition);
+}
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; }
+.btn-primary svg { position: relative; z-index: 1; transition: transform var(--transition); }
+.btn-primary:hover svg { transform: translateX(4px); }
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--navy);
+  border: 2px solid var(--navy);
+  padding: 14px 30px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-outline:hover {
+  background: var(--navy);
+  color: white;
+}
+.btn-outline.light {
+  color: white;
+  border-color: rgba(255,255,255,0.4);
+}
+.btn-outline.light:hover {
+  background: white;
+  color: var(--navy);
+  border-color: white;
+}
+
+/* ─── LOGO PLACEHOLDER ─── */
+.logo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy);
+  border-radius: 50%;
+  /* REPLACE THIS ENTIRE DIV with: <img src="your-ffc-logo.png" alt="FFC Logo"> */
+}
+
+/* ─── IMAGE PLACEHOLDER ─── */
+.img-placeholder {
+  background: linear-gradient(135deg, #1a2d4a 0%, #152540 50%, #0c1931 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 20px,
+    rgba(255,255,255,0.02) 20px,
+    rgba(255,255,255,0.02) 21px
+  );
+}
+.img-placeholder-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── VIDEO PLACEHOLDER ─── */
+.video-placeholder {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--navy);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.video-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 30px,
+    rgba(255,255,255,0.015) 30px,
+    rgba(255,255,255,0.015) 31px
+  );
+}
+.video-play-btn {
+  width: 72px; height: 72px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  transition: var(--transition);
+}
+.video-placeholder:hover .video-play-btn {
+  background: var(--royal-light);
+  transform: scale(1.08);
+}
+.video-play-btn svg { margin-left: 4px; }
+.video-embed-note {
+  position: absolute;
+  bottom: 16px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   HOME PAGE
+══════════════════════════════════════ */
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  background: var(--navy);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: 72px;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 80% 30%, rgba(26,61,124,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(26,61,124,0.25) 0%, transparent 60%);
+}
+/* Subtle geometric lines */
+.hero-lines {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0.06;
+}
+.hero-lines svg { width: 100%; height: 100%; }
+
+.hero-inner {
+  position: relative;
+  z-index: 10;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px 80px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 60px;
+  align-items: end;
+}
+.hero-content {}
+.hero-kicker {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--accent-lt);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(72px, 11vw, 148px);
+  line-height: 0.87;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  color: white;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.35s forwards;
+}
+.hero-title em {
+  font-style: normal;
+  color: var(--accent-lt);
+}
+.hero-subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(255,255,255,0.55);
+  margin-top: 22px;
+  letter-spacing: 0.5px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.5s forwards;
+}
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 48px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.65s forwards;
+}
+.hero-stat-block {
+  border-left: 1px solid rgba(255,255,255,0.1);
+  padding-left: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.5s forwards;
+}
+.hero-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.hero-stat {}
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 52px;
+  line-height: 1;
+  color: white;
+  letter-spacing: -1px;
+}
+.hero-stat-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+}
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.2s forwards;
+}
+.hero-scroll-indicator span {
+  font-family: var(--font-body);
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--accent-lt), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(24px); }
+}
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.2); }
+}
+
+/* Intro strip */
+.intro-strip {
+  background: var(--offwhite);
+  padding: 100px 0;
+}
+.intro-strip-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.intro-left {}
+.intro-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.intro-logo-block {
+  width: 180px;
+  height: 180px;
+  margin-bottom: 32px;
+  /* REPLACE with actual logo image */
+}
+.intro-logo-img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+}
+.intro-logo-circle {
+  display: none; /* legacy fallback, replaced by img */
+}
+.tagline {
+  font-family: var(--font-serif);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--grey-mid);
+  margin-top: -4px;
+}
+
+/* Events Preview */
+.events-preview {
+  background: var(--grey-lt);
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+}
+.events-preview::before {
+  content: 'EVENTS';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  font-family: var(--font-display);
+  font-size: 220px;
+  font-weight: 900;
+  color: rgba(0,0,0,0.04);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.events-preview-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.events-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 60px;
+}
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.event-card {
+  background: var(--white);
+  padding: 48px 40px 44px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+  border-bottom: 3px solid transparent;
+  display: flex;
+  flex-direction: column;
+}
+.event-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--navy);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 0;
+}
+.event-card:hover::after { transform: scaleY(1); }
+.event-card:hover { border-bottom-color: var(--royal-light); }
+.event-card > * { position: relative; z-index: 1; transition: color var(--transition); }
+.event-card:hover .event-num { color: rgba(255,255,255,0.06); }
+.event-card:hover .event-label { color: rgba(255,255,255,0.4); border-color: rgba(255,255,255,0.15); }
+.event-card:hover .event-name { color: white; }
+.event-card:hover .event-desc { color: rgba(255,255,255,0.55); }
+.event-card:hover .event-arrow { color: var(--accent-lt); }
+.event-card:hover .event-divider { background: rgba(255,255,255,0.15); }
+/* Large number — absolute watermark, top-right corner */
+.event-num {
+  position: absolute;
+  top: -8px;
+  right: 24px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 110px;
+  line-height: 1;
+  color: var(--grey-lt);
+  letter-spacing: -4px;
+  pointer-events: none;
+  user-select: none;
+  transition: color 0.45s ease;
+  z-index: 1;
+}
+/* Small "EVENT 01" label */
+.event-label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--royal);
+  margin-bottom: 16px;
+  transition: var(--transition);
+}
+/* Thin rule between label and heading */
+.event-divider {
+  width: 32px;
+  height: 2px;
+  background: var(--navy);
+  margin-bottom: 18px;
+  transition: var(--transition);
+}
+.event-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--navy);
+  line-height: 1.05;
+  margin-bottom: 18px;
+  transition: var(--transition);
+}
+.event-desc {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--grey-dark);
+  transition: var(--transition);
+  flex: 1;
+}
+.event-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--royal);
+  transition: var(--transition);
+}
+
+/* Image Gallery Preview */
+.gallery-preview {
+  padding: 100px 0;
+  background: var(--offwhite);
+}
+.gallery-preview-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 280px 200px;
+  gap: 4px;
+  margin-top: 48px;
+}
+.gallery-cell {
+  overflow: hidden;
+}
+.gallery-cell:first-child { grid-row: span 2; }
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  /* REPLACE with: <img src="event-photo.jpg" alt="..." style="width:100%;height:100%;object-fit:cover"> */
+}
+
+/* Videos Section */
+.videos-section {
+  background: var(--navy);
+  padding: 100px 0;
+}
+.videos-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.videos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 56px;
+}
+/* REPLACE video-placeholder divs with actual YouTube iframes */
+/* <iframe width="100%" style="aspect-ratio:16/9" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe> */
+
+/* CTA Section */
+.cta-section {
+  background: var(--accent);
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: 'FFC';
+  position: absolute;
+  top: -40px;
+  left: -30px;
+  font-family: var(--font-display);
+  font-size: 300px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.04);
+  line-height: 1;
+  pointer-events: none;
+}
+.cta-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.cta-heading {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(44px, 6vw, 80px);
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: white;
+  letter-spacing: -1px;
+}
+.cta-sub {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-style: italic;
+  color: rgba(255,255,255,0.75);
+  margin-top: 16px;
+}
+.btn-white {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--royal);
+  background: white;
+  padding: 18px 36px;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.btn-white:hover {
+  background: var(--navy);
+  color: white;
+}
+
+/* Values strip */
+.values-strip {
+  background: var(--navy-mid);
+  padding: 56px 0;
+  overflow: hidden;
+}
+.values-strip-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+}
+.value-item {
+  flex: 1;
+  padding: 0 32px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.value-item:first-child { padding-left: 0; }
+.value-item:last-child { border-right: none; padding-right: 0; }
+.value-icon {
+  width: 36px;
+  height: 2px;
+  background: var(--accent-lt);
+}
+.value-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: white;
+}
+.value-desc {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.45);
+}
+
+/* ══════════════════════════════════════
+   PROGRAMME PAGE
+══════════════════════════════════════ */
+.programme-hero {
+  background: var(--navy);
+  padding: 160px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.programme-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--royal-light), transparent);
+}
+.page-hero-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.page-hero-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(56px, 9vw, 120px);
+  line-height: 0.88;
+  text-transform: uppercase;
+  color: white;
+  letter-spacing: -2px;
+}
+.page-hero-sub {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-style: italic;
+  color: rgba(255,255,255,0.5);
+  margin-top: 20px;
+  max-width: 600px;
+}
+
+/* Programme sections */
+.prog-section {
+  padding: 100px 0;
+}
+.prog-section:nth-child(even) { background: var(--grey-lt); }
+.prog-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.prog-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.prog-three-col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 56px;
+}
+.award-card {
+  border-top: 3px solid var(--accent);
+  padding-top: 24px;
+}
+.award-card-event {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--royal);
+  margin-bottom: 12px;
+}
+.award-card-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  text-transform: uppercase;
+  color: var(--navy);
+  line-height: 1;
+  margin-bottom: 14px;
+}
+.award-card-desc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--grey-dark);
+}
+.timetable-block {
+  margin-top: 56px;
+}
+.timetable-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--navy);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--grey-lt);
+}
+.timetable-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 140px;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--grey-lt);
+  align-items: start;
+}
+.timetable-time {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--royal);
+  letter-spacing: 0.5px;
+}
+.timetable-event {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--navy);
+  font-weight: 500;
+}
+.timetable-location {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--grey-dark);
+  text-align: right;
+  letter-spacing: 0.5px;
+}
+.scoring-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 48px;
+}
+.score-item {
+  background: var(--navy);
+  padding: 36px 28px;
+  text-align: center;
+}
+.score-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 56px;
+  color: var(--accent-lt);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.score-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-top: 8px;
+}
+
+/* Resources */
+.resource-list {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.resource-item {
+  background: var(--white);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.resource-item:hover { background: var(--navy); }
+.resource-item:hover .resource-name { color: white; }
+.resource-item:hover .resource-type { color: rgba(255,255,255,0.4); }
+.resource-icon {
+  width: 40px; height: 40px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+.resource-item:hover .resource-icon { background: var(--accent-mid); }
+.resource-name {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy);
+  transition: var(--transition);
+}
+.resource-type {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--grey-dark);
+  transition: var(--transition);
+  margin-top: 2px;
+}
+
+/* ══════════════════════════════════════
+   EVENT PAGES (SHARED)
+══════════════════════════════════════ */
+.event-page-hero {
+  min-height: 50vh;
+  display: flex;
+  align-items: flex-end;
+  padding: 140px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+.event-bd-hero { background: linear-gradient(135deg, #0c1931 0%, #1a3d7c 100%); }
+.event-cs-hero { background: linear-gradient(135deg, #0c1931 0%, #0c1931 60%, #111827 100%); }
+.event-ic-hero { background: linear-gradient(135deg, #1a3d7c 0%, #0c1931 50%, #111827 100%); }
+
+.event-hero-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 60px;
+  align-items: end;
+}
+.event-hero-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(100px, 15vw, 180px);
+  line-height: 0.85;
+  color: rgba(255,255,255,0.06);
+  position: absolute;
+  right: 48px;
+  bottom: 40px;
+  letter-spacing: -4px;
+  pointer-events: none;
+}
+.event-tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent-lt);
+  border: 1px solid rgba(74,128,212,0.4);
+  padding: 6px 14px;
+  margin-bottom: 20px;
+}
+
+/* Phase timeline */
+.phase-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 48px;
+}
+.phase-item {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 40px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--grey-lt);
+  position: relative;
+}
+.phase-item::before {
+  content: '';
+  position: absolute;
+  left: 199px;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: var(--grey-lt);
+}
+.phase-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.phase-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 56px;
+  color: var(--grey-lt);
+  line-height: 1;
+  letter-spacing: -1px;
+}
+.phase-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--royal);
+}
+.phase-content {}
+.phase-title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--navy);
+  margin-bottom: 14px;
+}
+.phase-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--grey-dark);
+}
+.phase-detail-list {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.phase-detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--grey-dark);
+  line-height: 1.6;
+}
+.phase-detail-item::before {
+  content: '';
+  width: 16px;
+  height: 1px;
+  background: var(--royal);
+  flex-shrink: 0;
+  margin-top: 10px;
+}
+
+/* Judging rubric */
+.rubric-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+  margin-top: 48px;
+}
+.rubric-cell {
+  background: var(--white);
+  padding: 28px 20px;
+  border-top: 2px solid var(--royal-light);
+}
+.rubric-cell-dark {
+  background: var(--navy);
+  padding: 28px 20px;
+  border-top: 2px solid var(--royal-light);
+}
+.rubric-area {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.rubric-area-dark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  text-transform: uppercase;
+  color: white;
+  margin-bottom: 8px;
+}
+.rubric-desc {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--grey-dark);
+}
+.rubric-desc-dark {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.5);
+}
+
+/* Award display */
+.award-display {
+  background: var(--navy);
+  padding: 56px 48px;
+  margin-top: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.award-display::before {
+  content: '★';
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  font-size: 200px;
+  color: rgba(255,255,255,0.03);
+  line-height: 1;
+}
+.award-display-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 40px;
+  text-transform: uppercase;
+  color: var(--gold);
+  letter-spacing: -0.5px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.award-display-desc {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.6);
+  max-width: 600px;
+  position: relative;
+}
+
+/* ══════════════════════════════════════
+   ABOUT PAGE
+══════════════════════════════════════ */
+.about-hero {
+  background: var(--navy);
+  padding: 160px 0 80px;
+}
+.about-values-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+  margin-top: 56px;
+}
+.about-value-card {
+  background: var(--white);
+  padding: 36px 24px;
+  border-top: 3px solid var(--navy);
+  transition: var(--transition);
+}
+.about-value-card:hover {
+  background: var(--navy);
+  border-top-color: var(--royal);
+}
+.about-value-card:hover .about-value-name { color: white; }
+.about-value-card:hover .about-value-desc { color: rgba(255,255,255,0.5); }
+.about-value-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--navy);
+  margin-bottom: 12px;
+  transition: var(--transition);
+}
+.about-value-desc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--grey-dark);
+  transition: var(--transition);
+}
+
+/* History / Timeline */
+.history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 48px;
+}
+.timeline-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 40px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--grey-lt);
+}
+.timeline-period {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--royal);
+  padding-top: 4px;
+}
+.timeline-content {}
+.timeline-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.timeline-desc {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--grey-dark);
+}
+
+/* Contact section */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 48px;
+}
+.contact-card {
+  background: var(--white);
+  padding: 44px 40px;
+  border-top: 2px solid var(--navy);
+}
+.contact-type {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--royal);
+  margin-bottom: 12px;
+}
+.contact-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.contact-detail {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--grey-dark);
+  line-height: 1.6;
+}
+.contact-detail a {
+  color: var(--royal-light);
+}
+.contact-detail a:hover { text-decoration: underline; }
+
+/* FAQ */
+.faq-list {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.faq-item {
+  border-bottom: 1px solid var(--grey-lt);
+}
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+  cursor: pointer;
+  gap: 20px;
+}
+.faq-q-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--navy);
+  transition: color var(--transition);
+}
+.faq-item.open .faq-q-text { color: var(--royal); }
+.faq-toggle {
+  width: 28px; height: 28px;
+  border: 1px solid var(--grey-lt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--grey-dark);
+  transition: var(--transition);
+}
+.faq-item.open .faq-toggle {
+  background: var(--accent);
+  border-color: var(--royal);
+  color: white;
+  transform: rotate(45deg);
+}
+.faq-answer {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--grey-dark);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+.faq-item.open .faq-answer {
+  max-height: 300px;
+  padding-bottom: 24px;
+}
+
+/* Founder section */
+.founder-section {
+  background: var(--navy);
+  padding: 80px 0;
+}
+.founder-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.founder-avatar {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: var(--royal);
+  border: 3px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 800;
+  color: white;
+  /* REPLACE with actual photo */
+}
+.founder-quote {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-style: italic;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+.founder-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-lt);
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--ink);
+  padding: 72px 0 40px;
+}
+.footer-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.footer-brand-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: white;
+  margin-bottom: 8px;
+}
+.footer-brand-tag {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 20px;
+}
+.footer-brand-desc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.4);
+}
+.footer-col-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.footer-link {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+.footer-link:hover { color: white; }
+.footer-contact-item {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.footer-contact-item span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 2px;
+}
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+}
+.footer-copy {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.5px;
+}
+.footer-school {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 1px;
+}
+
+/* ─── MOBILE ─── */
+@media (max-width: 1024px) {
+  .container, .nav-inner, .hero-inner, .intro-strip-inner,
+  .events-preview-inner, .gallery-preview-inner, .videos-inner,
+  .cta-inner, .values-strip-inner, .prog-inner,
+  .page-hero-inner, .event-hero-inner, .footer-inner, .founder-inner {
+    padding: 0 24px;
+  }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-stat-block { display: none; }
+  .intro-strip-inner { grid-template-columns: 1fr; gap: 40px; }
+  .events-grid { grid-template-columns: 1fr; gap: 2px; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .gallery-cell:first-child { grid-row: auto; }
+  .videos-grid { grid-template-columns: 1fr; }
+  .cta-inner { grid-template-columns: 1fr; }
+  .values-strip-inner { flex-wrap: wrap; }
+  .value-item { flex: 1 1 40%; border-right: none; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .prog-two-col, .prog-three-col { grid-template-columns: 1fr; gap: 40px; }
+  .rubric-grid, .scoring-grid, .about-values-grid { grid-template-columns: 1fr 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .timetable-row { grid-template-columns: 90px 1fr; }
+  .timetable-location { display: none; }
+  .phase-item { grid-template-columns: 1fr; gap: 16px; }
+  .phase-item::before { display: none; }
+  .timeline-item { grid-template-columns: 1fr; gap: 8px; }
+  .event-hero-inner { grid-template-columns: 1fr; }
+  .founder-inner { grid-template-columns: 1fr; text-align: center; }
+  .hero-actions { flex-direction: column; }
+}
+@media (max-width: 640px) {
+  .hero-title { font-size: 60px; }
+  .rubric-grid, .scoring-grid, .about-values-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+  .events-preview-header { flex-direction: column; gap: 20px; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAVIGATION ══ -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('home')">
+      <img src="FFC_logo.png" alt="FFC Logo" class="nav-logo-mark">
+      <div class="nav-logo-text">
+        <span>Future Founders'</span>
+        <span>Challenge</span>
+      </div>
+    </div>
+    <div class="nav-links">
+      <div class="nav-link" onclick="showPage('home')">Home</div>
+      <div class="nav-link" onclick="showPage('programme')">The Programme</div>
+      <div class="nav-dropdown">
+        <div class="nav-link">Events ▾</div>
+        <div class="nav-dropdown-menu">
+          <div class="nav-dropdown-item" onclick="showPage('debate')">Business Debate</div>
+          <div class="nav-dropdown-item" onclick="showPage('casestudy')">Case Study Analysis</div>
+          <div class="nav-dropdown-item" onclick="showPage('innovators')">Innovators' Challenge</div>
+        </div>
+      </div>
+      <div class="nav-link" onclick="showPage('about')">About Us</div>
+      <!-- REGISTER LINK -->
+      <div class="nav-cta" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSecayHwD8yYmlIaiAg9D4OlvjG-SaqQJG20sFOUkCUNYZK0WQ/viewform?usp=publish-editor','_blank')">Register</div>
+    </div>
+    <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ══ HOME PAGE ══ -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines">
+      <svg viewBox="0 0 1400 800" preserveAspectRatio="xMidYMid slice">
+        <line x1="0" y1="200" x2="1400" y2="200" stroke="white" stroke-width="0.5"/>
+        <line x1="0" y1="600" x2="1400" y2="600" stroke="white" stroke-width="0.5"/>
+        <line x1="400" y1="0" x2="400" y2="800" stroke="white" stroke-width="0.5"/>
+        <line x1="1000" y1="0" x2="1000" y2="800" stroke="white" stroke-width="0.5"/>
+        <circle cx="400" cy="200" r="120" fill="none" stroke="white" stroke-width="0.5"/>
+        <circle cx="1000" cy="600" r="80" fill="none" stroke="white" stroke-width="0.5"/>
+        <line x1="0" y1="800" x2="400" y2="0" stroke="white" stroke-width="0.5"/>
+      </svg>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-kicker">POWIIS Penang · Est. 2026 · Malaysia</div>
+        <h1 class="hero-title">Future<br><em>Founders</em><br>Challenge</h1>
+        <p class="hero-subtitle">Developing Thinkers &middot; Creating Founders</p>
+        <div class="hero-actions">
+          <div class="btn-primary" onclick="showPage('programme')">
+            <span>Explore Programme</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="btn-outline light" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSecayHwD8yYmlIaiAg9D4OlvjG-SaqQJG20sFOUkCUNYZK0WQ/viewform?usp=publish-editor','_blank')">
+            Register Your Team
+          </div>
+        </div>
+      </div>
+      <div class="hero-stat-block">
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num">3</div>
+            <div class="hero-stat-label">Signature Events</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">2</div>
+            <div class="hero-stat-label">Competition Days</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num">1</div>
+            <div class="hero-stat-label">Integrated Experience</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Values Strip -->
+  <div class="values-strip">
+    <div class="values-strip-inner">
+      <div class="value-item reveal">
+        <div class="value-icon"></div>
+        <div class="value-name">Innovation</div>
+        <div class="value-desc">Bold ideas that shape tomorrow</div>
+      </div>
+      <div class="value-item reveal reveal-delay-1">
+        <div class="value-icon"></div>
+        <div class="value-name">Leadership</div>
+        <div class="value-desc">Confident, ethical decision-making</div>
+      </div>
+      <div class="value-item reveal reveal-delay-2">
+        <div class="value-icon"></div>
+        <div class="value-name">Collaboration</div>
+        <div class="value-desc">Strength through diverse thinking</div>
+      </div>
+      <div class="value-item reveal reveal-delay-3">
+        <div class="value-icon"></div>
+        <div class="value-name">Resilience</div>
+        <div class="value-desc">Adaptability under pressure</div>
+      </div>
+      <div class="value-item reveal reveal-delay-4">
+        <div class="value-icon"></div>
+        <div class="value-name">Impact</div>
+        <div class="value-desc">Solutions that create real change</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Intro -->
+  <section class="intro-strip">
+    <div class="intro-strip-inner">
+      <div class="intro-left reveal">
+        <div class="intro-logo-block">
+          <img src="FFC_logo.png" alt="FFC Logo" class="intro-logo-img">
+        </div>
+        <div class="section-label">What We Are</div>
+        <h2 class="section-heading" style="margin-bottom:24px">The Challenge<br>That Matters</h2>
+        <p class="tagline">DEVELOPING THINKERS &middot; CREATING FOUNDERS</p>
+      </div>
+      <div class="intro-right">
+        <p class="body-text reveal">
+          The Future Founders' Challenge (FFC) is a student-led national entrepreneurship and leadership competition founded at POWIIS, Penang. Inspired by global business challenges such as DECA, it is designed to equip secondary and pre-university students across Malaysia with skills needed to excel in innovation, leadership, collaboration, resilience, and social impact.
+        </p>
+        <p class="body-text reveal reveal-delay-1">
+          FFC provides participants with recognised awards and certified achievements that enhance university and scholarship applications. Top-performing teams have the opportunity to represent Malaysia in international virtual competitions, connecting them with a global network of young innovators.
+        </p>
+        <div class="reveal reveal-delay-2" style="margin-top:8px">
+          <div class="btn-primary" onclick="showPage('programme')">
+            <span>Read the Full Programme</span>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Events Preview -->
+  <section class="events-preview">
+    <div class="events-preview-inner">
+      <div class="events-preview-header reveal">
+        <div>
+          <div class="section-label">The Competition</div>
+          <h2 class="section-heading">Three Events.<br>One Standard.</h2>
+        </div>
+        <div class="btn-outline" onclick="showPage('programme')">View All Events</div>
+      </div>
+      <div class="events-grid">
+        <div class="event-card reveal" onclick="showPage('debate')">
+          <div class="event-num">01</div>
+          <div class="event-label">Event 01</div>
+          <div class="event-divider"></div>
+          <div class="event-name">Business<br>Debate</div>
+          <p class="event-desc">Two teams present and defend opposing business solutions to the same real-world case study. Strategy, logic, and persuasion under pressure.</p>
+          <div class="event-arrow">
+            Explore Event
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="event-card reveal reveal-delay-1" onclick="showPage('casestudy')">
+          <div class="event-num">02</div>
+          <div class="event-label">Event 02</div>
+          <div class="event-divider"></div>
+          <div class="event-name">Case Study<br>Analysis</div>
+          <p class="event-desc">Teams diagnose and solve complex real-world business problems within 90 minutes, presenting structured, financially-aware solutions to judges.</p>
+          <div class="event-arrow">
+            Explore Event
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="event-card reveal reveal-delay-2" onclick="showPage('innovators')">
+          <div class="event-num">03</div>
+          <div class="event-label">Event 03</div>
+          <div class="event-divider"></div>
+          <div class="event-name">Innovators'<br>Challenge</div>
+          <p class="event-desc">Teams build an original business plan from a live theme in 2 hours, then defend it before a panel of three judges for up to 100 stars.</p>
+          <div class="event-arrow">
+            Explore Event
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Preview -->
+  <section class="gallery-preview">
+    <div class="gallery-preview-inner">
+      <div class="reveal">
+        <div class="section-label">In the Room</div>
+        <h2 class="section-heading">The FFC<br>Experience</h2>
+      </div>
+      <!-- ═══════════════════════════════════════════════════════
+           PHOTO GALLERY — Replace each img-placeholder below with:
+           <img src="your-photo.jpg" alt="Description" style="width:100%;height:100%;object-fit:cover">
+           ═══════════════════════════════════════════════════════ -->
+      <div class="gallery-grid">
+        <div class="gallery-cell reveal">
+          <!-- PHOTO 1 (large, spans full height — recommended: event wide shot or group photo) -->
+          <div class="img-placeholder" style="height:100%">
+            <div class="img-placeholder-label">📷 PHOTO 1<br>Large hero photo<br>(spans full height)</div>
+          </div>
+        </div>
+        <div class="gallery-cell reveal reveal-delay-1">
+          <!-- PHOTO 2 (top right) -->
+          <div class="img-placeholder" style="height:100%">
+            <div class="img-placeholder-label">📷 PHOTO 2</div>
+          </div>
+        </div>
+        <div class="gallery-cell reveal reveal-delay-2">
+          <!-- PHOTO 3 (top far right) -->
+          <div class="img-placeholder" style="height:100%">
+            <div class="img-placeholder-label">📷 PHOTO 3</div>
+          </div>
+        </div>
+        <div class="gallery-cell reveal reveal-delay-2">
+          <!-- PHOTO 4 (bottom right) -->
+          <div class="img-placeholder" style="height:100%">
+            <div class="img-placeholder-label">📷 PHOTO 4</div>
+          </div>
+        </div>
+        <div class="gallery-cell reveal reveal-delay-3">
+          <!-- PHOTO 5 (bottom far right) -->
+          <div class="img-placeholder" style="height:100%">
+            <div class="img-placeholder-label">📷 PHOTO 5</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Videos -->
+  <section class="videos-section">
+    <div class="videos-inner">
+      <div class="reveal">
+        <div class="section-label light">Media</div>
+        <h2 class="section-heading light">FFC in<br>Action</h2>
+      </div>
+      <!-- ═══════════════════════════════════════════════════════
+           YOUTUBE VIDEOS — Replace each video-placeholder div below with:
+           <iframe width="100%" style="aspect-ratio:16/9;display:block"
+             src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+             frameborder="0" allowfullscreen></iframe>
+           Get YOUR_VIDEO_ID from the YouTube URL: youtube.com/watch?v=YOUR_VIDEO_ID
+           ═══════════════════════════════════════════════════════ -->
+      <div class="videos-grid">
+        <div class="reveal reveal-delay-1">
+          <!-- ▶ YOUTUBE VIDEO 1 — paste your iframe here -->
+          <div class="video-placeholder">
+            <div class="video-play-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="video-embed-note">▶ VIDEO 1 — Replace with YouTube iframe</div>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-2">
+          <!-- ▶ YOUTUBE VIDEO 2 — paste your iframe here -->
+          <div class="video-placeholder">
+            <div class="video-play-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="video-embed-note">▶ VIDEO 2 — Replace with YouTube iframe</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <div class="reveal">
+        <h2 class="cta-heading">Ready to<br>Compete?</h2>
+        <p class="cta-sub">Register your team for the next FFC competition.</p>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <!-- REPLACE onclick with: window.open('your-registration-link', '_blank') -->
+        <div class="btn-white" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSecayHwD8yYmlIaiAg9D4OlvjG-SaqQJG20sFOUkCUNYZK0WQ/viewform?usp=publish-editor','_blank')">
+          <span>Register Your Team</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /home -->
+
+<!-- ══ PROGRAMME PAGE ══ -->
+<div id="page-programme" class="page">
+  <section class="programme-hero">
+    <div class="page-hero-inner">
+      <div class="section-label light">The Programme</div>
+      <h1 class="page-hero-title">What Is<br>FFC?</h1>
+      <p class="page-hero-sub">A student-led national entrepreneurship and leadership competition — built by students, for students.</p>
+    </div>
+  </section>
+
+  <!-- Introduction -->
+  <section class="prog-section">
+    <div class="prog-inner">
+      <div class="prog-two-col">
+        <div class="reveal">
+          <div class="section-label">Introduction</div>
+          <h2 class="editorial-heading" style="margin-bottom:28px">The Future Founders' Challenge</h2>
+          <p class="body-text" style="margin-bottom:20px">The Future Founders' Challenge (FFC) is a student-led national entrepreneurship and leadership competition founded at POWIIS, Penang. Inspired by the spirit of global business challenges such as DECA, it is designed to equip secondary and pre-university students across Malaysia with the skills needed to excel in innovation, leadership, collaboration, resilience, and social impact.</p>
+          <p class="body-text">FFC features business pitch competitions, case study analysis, and debating challenges. It provides participants with recognised awards and certified achievements that enhance university and scholarship applications. Top-performing teams may represent Malaysia in international virtual competitions, connecting them with a global network of young innovators.</p>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="section-label">Vision</div>
+          <h2 class="editorial-heading" style="margin-bottom:28px">Confidence, Creativity, and Leadership</h2>
+          <p class="body-text" style="margin-bottom:20px">To give students in Malaysia a chance to explore business in a real, hands-on way. We want to build confidence, creativity, and leadership through a challenge that's fun but also helps learn real-world skills.</p>
+          <p class="body-text">It's not just about winning — it's about preparing for the future, and showing that students at POWIIS can think big and lead with purpose.</p>
+          <div style="margin-top:32px; padding:28px; background:var(--offwhite); border-left:3px solid var(--accent)">
+            <p class="body-text" style="font-style:italic; color:var(--navy); font-size:16px">"Do not be afraid to take bold ideas, question assumptions, and learn from the process. The goal is not only to win, but to grow."</p>
+            <div style="margin-top:12px; font-family:var(--font-display); font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--royal-light)">— Darren Chan, Founder & Executive Director</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Values -->
+  <section class="prog-section">
+    <div class="prog-inner">
+      <div class="reveal">
+        <div class="section-label">Core Values</div>
+        <h2 class="section-heading" style="margin-bottom:48px">What We<br>Stand For</h2>
+      </div>
+      <div class="about-values-grid">
+        <div class="about-value-card reveal"><div class="about-value-name">Innovation</div><p class="about-value-desc">We champion bold ideas and creative thinking, empowering young founders to design solutions that shape the future.</p></div>
+        <div class="about-value-card reveal reveal-delay-1"><div class="about-value-name">Leadership</div><p class="about-value-desc">We develop confident, ethical leaders who inspire and guide others toward a shared vision.</p></div>
+        <div class="about-value-card reveal reveal-delay-2"><div class="about-value-name">Collaboration</div><p class="about-value-desc">We foster teamwork across cultures and disciplines, believing that diverse perspectives spark the best ideas.</p></div>
+        <div class="about-value-card reveal reveal-delay-3"><div class="about-value-name">Resilience</div><p class="about-value-desc">We teach persistence and adaptability, turning challenges into opportunities for growth.</p></div>
+        <div class="about-value-card reveal reveal-delay-4"><div class="about-value-name">Impact</div><p class="about-value-desc">We drive ventures that create meaningful, positive change for communities, the environment, and the economy.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The 3 Events Overview -->
+  <section class="prog-section">
+    <div class="prog-inner">
+      <div class="reveal">
+        <div class="section-label">Academic Events</div>
+        <h2 class="section-heading" style="margin-bottom:48px">Three Events,<br>One Day</h2>
+      </div>
+      <div class="events-grid">
+        <div class="event-card reveal" onclick="showPage('debate')">
+          <div class="event-num">01</div>
+          <div class="event-label">Event 01</div>
+          <div class="event-divider"></div>
+          <div class="event-name">Business Debate</div>
+          <p class="event-desc">Teams of 3 present and defend business solutions to a shared case study using structured debate. Each speaker has 4 minutes. Alternating format with 60-second buffers between speeches.</p>
+          <div class="event-arrow">View Full Rules <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="event-card reveal reveal-delay-1" onclick="showPage('casestudy')">
+          <div class="event-num">02</div>
+          <div class="event-label">Event 02</div>
+          <div class="event-divider"></div>
+          <div class="event-name">Case Study Analysis</div>
+          <p class="event-desc">35 minutes of preparation, 15 minutes of presentation, 10 minutes of Q&amp;A. Teams must diagnose root causes and propose financially feasible, strategic solutions.</p>
+          <div class="event-arrow">View Full Rules <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="event-card reveal reveal-delay-2" onclick="showPage('innovators')">
+          <div class="event-num">03</div>
+          <div class="event-label">Event 03</div>
+          <div class="event-divider"></div>
+          <div class="event-name">Innovators' Challenge</div>
+          <p class="event-desc">2 hours of team development, 10–30 minute presentation, judged out of 100 stars across Business Plan Quality, Strategic Thinking, and Presentation.</p>
+          <div class="event-arrow">View Full Rules <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Awards -->
+  <section class="prog-section">
+    <div class="prog-inner">
+      <div class="reveal">
+        <div class="section-label">Recognition</div>
+        <h2 class="section-heading" style="margin-bottom:48px">Awards &amp;<br>Honours</h2>
+      </div>
+      <div class="prog-three-col">
+        <div class="award-card reveal">
+          <div class="award-card-event">Business Debate</div>
+          <div class="award-card-name">The Market Persuaders Award</div>
+          <p class="award-card-desc">Awarded to the most convincing debate team that demonstrates mastery in communication, logic, and business strategy. Teams must exhibit professionalism, confidence, and the ability to persuade using real-world economic reasoning.</p>
+        </div>
+        <div class="award-card reveal reveal-delay-1">
+          <div class="award-card-event">Case Study Analysis</div>
+          <div class="award-card-name">The Analytical Excellence Award</div>
+          <p class="award-card-desc">Given to the team that delivers the most well-reasoned and strategic solution to a complex business challenge. Winners are recognised for their ability to analyse, adapt, and provide actionable recommendations under pressure.</p>
+        </div>
+        <div class="award-card reveal reveal-delay-2">
+          <div class="award-card-event">Innovators' Challenge</div>
+          <div class="award-card-name">The Future Founder Trophy</div>
+          <p class="award-card-desc">Presented to the team whose project demonstrates the greatest originality, scalability, and potential for real-world impact. Awarded to visionaries who think beyond the present — those shaping tomorrow's entrepreneurial frontiers.</p>
+        </div>
+        <div class="award-card reveal">
+          <div class="award-card-event">Written Business Plan</div>
+          <div class="award-card-name">The Profit Pioneer Cup</div>
+          <p class="award-card-desc">Awarded to the competitor who presents the most visionary and feasible business plan, combining creativity with sustainability. Honours participants who transform imagination into enterprise.</p>
+        </div>
+        <div class="award-card reveal reveal-delay-1">
+          <div class="award-card-event">Honourable Mention</div>
+          <div class="award-card-name">The Startup Award</div>
+          <p class="award-card-desc">Recognises participants who showed creativity and effort but did not place in medal tiers. Celebrates promising young entrepreneurs at the very start of their innovation journey.</p>
+        </div>
+        <div class="award-card reveal reveal-delay-2" style="border-top-color:var(--gold)">
+          <div class="award-card-event" style="color:var(--gold)">Overall Best Team</div>
+          <div class="award-card-name">Titan of Industry Award</div>
+          <p class="award-card-desc">Awarded to the highest-performing team across all events. The ultimate honour at FFC, symbolising the complete entrepreneur — visionary, strategic, and unshakably collaborative.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Event Timetable -->
+  <section class="prog-section">
+    <div class="prog-inner">
+      <div class="reveal">
+        <div class="section-label">Schedule</div>
+        <h2 class="section-heading" style="margin-bottom:48px">Competition<br>Calendar</h2>
+      </div>
+      <!-- REGISTER LINK -->
+      <div class="prog-two-col">
+        <div class="timetable-block reveal">
+          <div class="timetable-title">Day 1</div>
+          <div class="timetable-row"><div class="timetable-time">9:00 AM</div><div class="timetable-event">Arrival, Attendance &amp; ID Distribution</div><div class="timetable-location">Lobby</div></div>
+          <div class="timetable-row"><div class="timetable-time">9:30 AM</div><div class="timetable-event">Opening Ceremony</div><div class="timetable-location">Auditorium</div></div>
+          <div class="timetable-row"><div class="timetable-time">11:30 AM</div><div class="timetable-event">Team Planning</div><div class="timetable-location">Auditorium</div></div>
+          <div class="timetable-row"><div class="timetable-time">12:10 PM</div><div class="timetable-event">Lunch Break</div><div class="timetable-location">Canteen</div></div>
+          <div class="timetable-row"><div class="timetable-time">1:00 PM</div><div class="timetable-event">Case Study Analysis</div><div class="timetable-location">Floor 1 &amp; 2</div></div>
+          <div class="timetable-row"><div class="timetable-time">2:00 PM</div><div class="timetable-event">Business Debate</div><div class="timetable-location">Floor 1 &amp; 2</div></div>
+          <div class="timetable-row"><div class="timetable-time">5:00 PM+</div><div class="timetable-event">Departure</div><div class="timetable-location">Lobby</div></div>
+        </div>
+        <div class="timetable-block reveal reveal-delay-1">
+          <div class="timetable-title">Day 2</div>
+          <div class="timetable-row"><div class="timetable-time">9:00 AM</div><div class="timetable-event">Arrival &amp; Attendance</div><div class="timetable-location">Lobby</div></div>
+          <div class="timetable-row"><div class="timetable-time">9:30 AM</div><div class="timetable-event">Innovators' Challenge Announcement</div><div class="timetable-location">Auditorium</div></div>
+          <div class="timetable-row"><div class="timetable-time">10:00 AM</div><div class="timetable-event">Innovators' Challenge Planning</div><div class="timetable-location">Floor 1 &amp; 2</div></div>
+          <div class="timetable-row"><div class="timetable-time">12:10 PM</div><div class="timetable-event">Lunch Break</div><div class="timetable-location">Canteen</div></div>
+          <div class="timetable-row"><div class="timetable-time">1:00 PM</div><div class="timetable-event">Innovators' Challenge Presentation</div><div class="timetable-location">Floor 1 &amp; 2</div></div>
+          <div class="timetable-row"><div class="timetable-time">2:00 PM</div><div class="timetable-event">Entrepreneur Social Meeting</div><div class="timetable-location">MPH</div></div>
+          <div class="timetable-row"><div class="timetable-time">3:30 PM</div><div class="timetable-event">Closing Ceremony</div><div class="timetable-location">Auditorium</div></div>
+          <div class="timetable-row"><div class="timetable-time">5:30 PM</div><div class="timetable-event">Departure</div><div class="timetable-location">Lobby</div></div>
+        </div>
+      </div>
+      <div style="margin-top:40px; padding:28px; background:var(--navy); display:flex; justify-content:space-between; align-items:center; gap:32px" class="reveal">
+        <div>
+          <div style="font-family:var(--font-display);font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--accent-lt);margin-bottom:6px">Registration</div>
+          <!-- REPLACE with actual date -->
+          <div style="font-family:var(--font-serif);font-size:20px;color:white;font-style:italic">Registration details to be confirmed — check back soon.</div>
+        </div>
+        <div class="btn-white" style="background:var(--accent);color:white" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSecayHwD8yYmlIaiAg9D4OlvjG-SaqQJG20sFOUkCUNYZK0WQ/viewform?usp=publish-editor','_blank')">Register Now</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mascot -->
+  <section class="prog-section" style="background:var(--navy)">
+    <div class="prog-inner">
+      <div class="prog-two-col" style="align-items:center">
+        <div class="reveal">
+          <div class="section-label light">The Mascot</div>
+          <h2 class="section-heading light" style="margin-bottom:24px">The Polar<br>Bear</h2>
+          <p class="body-text light" style="margin-bottom:20px">The polar bear represents the core values of the Future Founders' Challenge: strength, intelligence, and strategic thinking. Just like a polar bear survives in one of the harshest environments on Earth, successful founders must be resilient, adaptable, and capable of making smart decisions under pressure.</p>
+          <p class="body-text light">The mascot symbolises calm confidence, leadership, and the ability to navigate challenges with strategy and determination.</p>
+        </div>
+        <div class="reveal reveal-delay-1" style="display:flex;align-items:center;justify-content:center">
+          <!-- REPLACE with: <img src="ffc-mascot.png" alt="FFC Polar Bear Mascot" style="max-width:320px"> -->
+          <div style="width:280px;height:280px;background:var(--royal);border-radius:50%;border:4px solid var(--royal-light);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:80px;color:white;letter-spacing:-2px">🐻‍❄️</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /programme -->
+
+<!-- ══ BUSINESS DEBATE PAGE ══ -->
+<div id="page-debate" class="page">
+  <section class="event-page-hero event-bd-hero">
+    <div class="event-hero-inner">
+      <div>
+        <div class="event-tag">Event 01 — Business Debate</div>
+        <h1 class="page-hero-title">Business<br>Debate</h1>
+        <p class="page-hero-sub" style="margin-top:16px">Strategy. Persuasion. Commercial Judgement.</p>
+      </div>
+    </div>
+    <div class="event-hero-num">01</div>
+  </section>
+
+  <section style="background:var(--offwhite);padding:100px 0">
+    <div class="prog-inner">
+      <div class="prog-two-col">
+        <div class="reveal">
+          <div class="section-label">What is it?</div>
+          <h2 class="editorial-heading" style="margin-bottom:24px">The Art of the Business Argument</h2>
+          <p class="body-text" style="margin-bottom:18px">The FFC Business Debate is a structured, competitive discussion where two teams present and defend their business solutions to the same case study. Rather than simply proposing ideas, teams must justify their strategy, demonstrate how it works in practice, and critically evaluate the strengths and weaknesses of opposing solutions.</p>
+          <p class="body-text">Each team consists of three speakers with defined roles. The debate tests strategic thinking, business reasoning, communication skills, and the ability to respond under pressure.</p>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="section-label">Judging Focus</div>
+          <div style="display:flex;flex-direction:column;gap:16px;margin-top:8px">
+            <div style="padding:20px;background:var(--white);border-left:3px solid var(--accent)">
+              <div style="font-family:var(--font-display);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:6px">Depth of Analysis</div>
+              <div class="body-text" style="font-size:13px">How deeply does the team understand the business problem?</div>
+            </div>
+            <div style="padding:20px;background:var(--white);border-left:3px solid var(--accent)">
+              <div style="font-family:var(--font-display);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:6px">Feasibility</div>
+              <div class="body-text" style="font-size:13px">Are the proposed solutions realistic and financially grounded?</div>
+            </div>
+            <div style="padding:20px;background:var(--white);border-left:3px solid var(--accent)">
+              <div style="font-family:var(--font-display);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:var(--navy);margin-bottom:6px">Communication</div>
+              <div class="body-text" style="font-size:13px">Clarity, evidence use, persuasion, and professional delivery.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Phases -->
+  <section style="background:var(--grey-lt);padding:100px 0">
+    <div class="prog-inner">
+      <div class="reveal">
+        <div class="section-label">Official Procedure</div>
+        <h2 class="section-heading" style="margin-bottom:0">How It Works</h2>
+      </div>
+      <div class="phase-list">
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">01</div><div class="phase-name">Phase One</div></div>
+          <div class="phase-content">
+            <div class="phase-title">Orientation &amp; Setup</div>
+            <p class="phase-desc">Teams convene in the auditorium to receive their Debate Tree, which details assigned rooms, opponents, and stance (Affirmative or Negative) for each round. Upon entering the debate room, teams introduce themselves to the adjudicator. This is the only time electronic devices may be used for research.</p>
+          </div>
+        </div>
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">02</div><div class="phase-name">Phase Two</div></div>
+          <div class="phase-content">
+            <div class="phase-title">Preparation — 15 Minutes</div>
+            <p class="phase-desc">The adjudicator reveals the specific business case or motion. Teams have a 15-minute block to map out their strategy, draft speeches, and find evidence. After this window, all electronic devices must be put away — all following notes must be on paper.</p>
+          </div>
+        </div>
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">03</div><div class="phase-name">Phase Three</div></div>
+          <div class="phase-content">
+            <div class="phase-title">The Debate Round</div>
+            <p class="phase-desc">The debate follows a strict alternating order. Each speaker has up to 4 minutes to deliver their points. Between each speech, both teams receive a 60-second buffer to adjust rebuttals.</p>
+            <div class="phase-detail-list">
+              <div class="phase-detail-item">1st Leader speaks (4 min)</div>
+              <div class="phase-detail-item">1st Challenger responds (4 min)</div>
+              <div class="phase-detail-item">2nd Leader speaks (4 min)</div>
+              <div class="phase-detail-item">2nd Challenger responds (4 min)</div>
+              <div class="phase-detail-item">3rd Leader speaks (4 min)</div>
+              <div class="phase-detail-item">3rd Challenger responds (4 min)</div>
+            </div>
+          </div>
+        </div>
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">04</div><div class="phase-name">Phase Four</div></div>
+          <div class="phase-content">
+            <div class="phase-title">Feedback &amp; Results</div>
+            <p class="phase-desc">Following the final speech, teams have 90 seconds to prepare a 90-second constructive feedback session for opponents. The adjudicator then deliberates and announces the winner based on depth of business analysis, feasibility, and communication effectiveness.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rules & Debate Tree -->
+  <section style="background:var(--offwhite);padding:100px 0">
+    <div class="prog-inner">
+      <div class="prog-two-col">
+        <div class="reveal">
+          <div class="section-label">Key Rules</div>
+          <h2 class="editorial-heading" style="margin-bottom:28px">Regulations</h2>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="phase-detail-item" style="font-size:14px;color:var(--ink)">One Point of Information (POI) per student, directed at their direct counterpart in the opposing team.</div>
+            <div class="phase-detail-item" style="font-size:14px;color:var(--ink)">Speeches are recorded. ChatGPT is allowed only during the initial 15-minute research phase. Final speeches must be the students' original work — AI detectors will be used during review.</div>
+            <div class="phase-detail-item" style="font-size:14px;color:var(--ink)">The Debate Tree (Bull/Bear paths) determines team progression across rounds. Bull path = win (Affirmative). Bear path = loss (Negative).</div>
+            <div class="phase-detail-item" style="font-size:14px;color:var(--ink)">Professional conduct must be maintained at all times. Disrespect to opponents or judges may result in disqualification.</div>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="section-label">The Debate Tree</div>
+          <h2 class="editorial-heading" style="margin-bottom:16px">Match Progression</h2>
+          <p class="body-text" style="margin-bottom:24px">The Debate Tree is FFC's structured match progression system. Teams move through rounds based on performance — Bull path after a win, Bear path after a loss.</p>
+          <div style="background:var(--navy);padding:28px;font-family:var(--font-body);font-size:13px;line-height:1.8;color:rgba(255,255,255,0.7)">
+            <div style="color:var(--accent-lt);font-weight:600;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;font-size:11px">Key Terms</div>
+            <div><strong style="color:white">Leader</strong> — Team defending or supporting the motion</div>
+            <div><strong style="color:white">Challenger</strong> — Team opposing the motion</div>
+            <div><strong style="color:var(--accent-lt)">Bull Path</strong> — Advancement after a win (Affirmative)</div>
+            <div><strong style="color:#c0392b">Bear Path</strong> — Redirection after a loss (Negative)</div>
+            <div><strong style="color:white">Team Code</strong> — Unique identifier (e.g. A067) for tracking</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Award -->
+  <section style="background:var(--grey-lt);padding:100px 0">
+    <div class="prog-inner">
+      <div class="section-label reveal">Award</div>
+      <h2 class="section-heading reveal" style="margin-bottom:24px">The Market<br>Persuaders Award</h2>
+      <div class="award-display reveal">
+        <div class="award-display-name">🏆 The Market Persuaders Award</div>
+        <p class="award-display-desc">Awarded to the most convincing debate team that demonstrates mastery in communication, logic, and business strategy. Teams must exhibit professionalism, confidence, and the ability to persuade using real-world economic and entrepreneurial reasoning. This award celebrates teams that can influence through ideas — reflecting how communication drives success in real business negotiations.</p>
+      </div>
+    </div>
+  </section>
+</div><!-- /debate -->
+
+<!-- ══ CASE STUDY PAGE ══ -->
+<div id="page-casestudy" class="page">
+  <section class="event-page-hero event-cs-hero">
+    <div class="event-hero-inner">
+      <div>
+        <div class="event-tag">Event 02 — Case Study Analysis</div>
+        <h1 class="page-hero-title">Case Study<br>Analysis</h1>
+        <p class="page-hero-sub" style="margin-top:16px">Diagnose. Analyse. Solve. Under pressure.</p>
+      </div>
+    </div>
+    <div class="event-hero-num">02</div>
+  </section>
+
+  <section style="background:var(--offwhite);padding:100px 0">
+    <div class="prog-inner">
+      <div class="prog-two-col">
+        <div class="reveal">
+          <div class="section-label">What is it?</div>
+          <h2 class="editorial-heading" style="margin-bottom:24px">Executive Thinking Under a Time Limit</h2>
+          <p class="body-text" style="margin-bottom:18px">The FFC Case Study Analysis is a high-pressure competitive event that challenges teams to diagnose and solve complex, real-world business problems within a strict timeframe. Participants are judged on their ability to identify underlying issues, analyse root causes with logical precision, and develop strategic solutions that demonstrate both financial awareness and risk control.</p>
+          <p class="body-text">This event serves as a rigorous test of a team's analytical thinking, structured reasoning, and professional presentation skills.</p>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="section-label">Scoring Tiers</div>
+          <div class="scoring-grid" style="grid-template-columns:1fr 1fr;margin-top:0">
+            <div class="score-item"><div class="score-num" style="color:var(--gold)">22–25</div><div class="score-label">Gold Level</div></div>
+            <div class="score-item"><div class="score-num" style="color:#b0bec5">18–21</div><div class="score-label">Silver Level</div></div>
+            <div class="score-item"><div class="score-num" style="color:#a5d6a7">14–17</div><div class="score-label">Startup Award</div></div>
+            <div class="score-item"><div class="score-num">+6</div><div class="score-label">Max Bonus Stars</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Event Flow -->
+  <section style="background:var(--grey-lt);padding:100px 0">
+    <div class="prog-inner">
+      <div class="reveal"><div class="section-label">Official Event Flow</div><h2 class="section-heading" style="margin-bottom:0">How It Works</h2></div>
+      <div class="phase-list">
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">01</div><div class="phase-name">Setup</div></div>
+          <div class="phase-content">
+            <div class="phase-title">Room Requirements</div>
+            <div class="phase-detail-list">
+              <div class="phase-detail-item">3 tables and 3 chairs per team at each station.</div>
+              <div class="phase-detail-item">Judge must have a clear, unobstructed view of all device screens at all times. Repositioning to hide screens is grounds for disqualification.</div>
+              <div class="phase-detail-item">Teams must grant the judge viewing access to all digital slides and documents before starting.</div>
+            </div>
+          </div>
+        </div>
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">02</div><div class="phase-name">Preparation</div></div>
+          <div class="phase-content">
+            <div class="phase-title">35 Minutes of Prep</div>
+            <p class="phase-desc">Phase A (5 min): Reading and initial analysis. Research is allowed; writing may begin. Phase B (30 min): Full case study preparation — build your strategy and slides. All devices must be turned off when the timer hits zero, except for the presenting team.</p>
+            <div style="margin-top:16px;padding:16px;background:rgba(26,61,124,0.07);border-left:2px solid var(--royal-light)">
+              <div style="font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--royal-light);margin-bottom:6px">AI Rules</div>
+              <div style="font-family:var(--font-body);font-size:13px;color:var(--grey-dark)"><strong>Strictly Prohibited:</strong> ChatGPT, AI writing tools, auto-analysis software, AI browser extensions.<br><strong>Allowed:</strong> Google Search, YouTube, Wikipedia, Google Translate (translation only), QuillBot (grammar only).</div>
+            </div>
+          </div>
+        </div>
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">03</div><div class="phase-name">Presentation</div></div>
+          <div class="phase-content">
+            <div class="phase-title">15 Minutes Per Team</div>
+            <p class="phase-desc">Each team has 15 minutes to present their analysis. The non-presenting team must remain silent, face the presenters, and refrain from note-taking or further preparation.</p>
+          </div>
+        </div>
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">04</div><div class="phase-name">Q&amp;A</div></div>
+          <div class="phase-content">
+            <div class="phase-title">10 Minutes — 2 Questions</div>
+            <div class="phase-detail-list">
+              <div class="phase-detail-item">Exactly 2 questions per team (strictly enforced).</div>
+              <div class="phase-detail-item">If the opposing team asks 1 question (max 1 min), the judge asks 1. If the opposing team asks 0, the judge asks 2.</div>
+              <div class="phase-detail-item">1 minute to ask; 4 minutes to answer. Total event duration: 90 minutes.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rubric -->
+  <section style="background:var(--offwhite);padding:100px 0">
+    <div class="prog-inner">
+      <div class="reveal"><div class="section-label">Scoring Breakdown</div><h2 class="section-heading" style="margin-bottom:8px">The 25-Star<br>System</h2><p class="body-text" style="margin-top:16px;margin-bottom:0">Each of the five sections is worth up to 5 stars. Q&amp;A bonus stars (up to +6) may be awarded on top.</p></div>
+      <div class="rubric-grid reveal">
+        <div class="rubric-cell"><div class="rubric-area">Clarity of Vision</div><p class="rubric-desc">Executive Summary and Product Overview. Compelling value proposition with a clearly defined target audience.</p></div>
+        <div class="rubric-cell"><div class="rubric-area">Problem–Solution Fit</div><p class="rubric-desc">Does the product actually fix the identified problem? Show deep understanding of the root cause with originality.</p></div>
+        <div class="rubric-cell"><div class="rubric-area">Business Structure</div><p class="rubric-desc">Business model and team roles. Clear hierarchy with justification for each leadership role and skill set.</p></div>
+        <div class="rubric-cell"><div class="rubric-area">Marketing &amp; Operations</div><p class="rubric-desc">Customer Acquisition Model and detailed Operational Workflow — supply chain, staffing, and scalability.</p></div>
+        <div class="rubric-cell"><div class="rubric-area">Financial Planning</div><p class="rubric-desc">Realistic revenue projections. Clear revenue model, profit path, and demonstrated understanding of risks.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Award -->
+  <section style="background:var(--grey-lt);padding:80px 0">
+    <div class="prog-inner">
+      <div class="section-label reveal">Award</div>
+      <div class="award-display reveal">
+        <div class="award-display-name">🏆 The Analytical Excellence Award</div>
+        <p class="award-display-desc">Given to the team that delivers the most well-reasoned and strategic solution to a complex business challenge. Winners are recognised for their ability to analyse, adapt, and provide actionable recommendations under pressure. This award recognises those who think like executives — using logic, insight, and quick reasoning to lead through uncertainty.</p>
+      </div>
+    </div>
+  </section>
+</div><!-- /casestudy -->
+
+<!-- ══ INNOVATORS' CHALLENGE PAGE ══ -->
+<div id="page-innovators" class="page">
+  <section class="event-page-hero event-ic-hero">
+    <div class="event-hero-inner">
+      <div>
+        <div class="event-tag">Event 03 — Innovators' Challenge</div>
+        <h1 class="page-hero-title">Innovators'<br>Challenge</h1>
+        <p class="page-hero-sub" style="margin-top:16px">Build a business from a theme in two hours. Then defend it.</p>
+      </div>
+    </div>
+    <div class="event-hero-num">03</div>
+  </section>
+
+  <section style="background:var(--offwhite);padding:100px 0">
+    <div class="prog-inner">
+      <div class="prog-two-col">
+        <div class="reveal">
+          <div class="section-label">What is it?</div>
+          <h2 class="editorial-heading" style="margin-bottom:24px">From Theme to Business Plan in 2 Hours</h2>
+          <p class="body-text" style="margin-bottom:18px">Teams receive a challenge theme at the Opening Ceremony and use the associated case study to build a complete business plan within a 2-hour preparation period. After lunch, they present to a panel of three judges for 10 to 30 minutes, followed by a structured Q&amp;A.</p>
+          <p class="body-text">This event develops creative problem-solving, entrepreneurial thinking, and the ability to turn ideas into realistic, impactful solutions under strict time pressure.</p>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="section-label">Judge Roles &amp; Scoring</div>
+          <div style="display:flex;flex-direction:column;gap:2px;margin-top:8px">
+            <div style="background:var(--navy);padding:24px 20px">
+              <div style="font-family:var(--font-display);font-weight:800;font-size:32px;color:var(--accent-lt)">50</div>
+              <div style="font-family:var(--font-body);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-top:2px">Stars — Judge A: Business Plan Quality</div>
+            </div>
+            <div style="background:var(--royal);padding:24px 20px">
+              <div style="font-family:var(--font-display);font-weight:800;font-size:32px;color:white">25</div>
+              <div style="font-family:var(--font-body);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-top:2px">Stars — Judge B: Strategic Thinking</div>
+            </div>
+            <div style="background:var(--accent);padding:24px 20px">
+              <div style="font-family:var(--font-display);font-weight:800;font-size:32px;color:white">25</div>
+              <div style="font-family:var(--font-body);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-top:2px">Stars — Judge C: Presentation &amp; Q&amp;A</div>
+            </div>
+            <div style="background:var(--gold);padding:16px 20px;display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:var(--font-display);font-weight:800;font-size:24px;color:var(--navy)">100 Stars Total</div>
+              <div style="font-family:var(--font-body);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--navy)">Per Team</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Event Flow -->
+  <section style="background:var(--grey-lt);padding:100px 0">
+    <div class="prog-inner">
+      <div class="reveal"><div class="section-label">Official Event Flow</div><h2 class="section-heading" style="margin-bottom:0">How It Works</h2></div>
+      <div class="phase-list">
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">01</div><div class="phase-name">Preparation</div></div>
+          <div class="phase-content">
+            <div class="phase-title">2-Hour Development Period</div>
+            <p class="phase-desc">Teams gather for a central briefing at the Opening Ceremony where the official challenge theme is introduced. Teams then move to assigned rooms with 3 judges. Documents must be shared with all 3 judges and the Judging Email before preparation begins.</p>
+            <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="padding:16px;background:rgba(26,61,124,0.07);border-left:2px solid var(--royal-light)">
+                <div style="font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--royal-light);margin-bottom:8px">Allowed</div>
+                <div style="font-family:var(--font-body);font-size:12.5px;color:var(--grey-dark);line-height:1.7">AI tools for research and calculations · Team discussion · Laptops and tablets · Taking notes</div>
+              </div>
+              <div style="padding:16px;background:rgba(180,0,0,0.06);border-left:2px solid #c0392b">
+                <div style="font-family:var(--font-display);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c0392b;margin-bottom:8px">Prohibited</div>
+                <div style="font-family:var(--font-body);font-size:12.5px;color:var(--grey-dark);line-height:1.7">Copying AI-generated content · Outside help · Hiding screens · Disabling document sharing</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">02</div><div class="phase-name">Presentation</div></div>
+          <div class="phase-content">
+            <div class="phase-title">10–30 Minutes Per Team</div>
+            <div class="phase-detail-list">
+              <div class="phase-detail-item">Minimum 10 minutes, maximum 30 minutes of speaking time.</div>
+              <div class="phase-detail-item">Teams must clearly identify the problem, target market, and propose an innovative, practical, and scalable solution.</div>
+              <div class="phase-detail-item">Non-presenting teams must close devices, not edit work, and remain silent and respectful.</div>
+              <div class="phase-detail-item">Presentation order is determined by ascending Team ID number.</div>
+            </div>
+          </div>
+        </div>
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">03</div><div class="phase-name">Q&amp;A</div></div>
+          <div class="phase-content">
+            <div class="phase-title">10 Minutes — Strategic Testing</div>
+            <div class="phase-detail-list">
+              <div class="phase-detail-item">Judge A and Judge B each ask 1 question based on their rubric area.</div>
+              <div class="phase-detail-item">1 minute to ask; 4 minutes to answer. No follow-up questions allowed.</div>
+              <div class="phase-detail-item">Questions assess feasibility, risks, cost structure, and sustainability.</div>
+            </div>
+          </div>
+        </div>
+        <div class="phase-item reveal">
+          <div class="phase-label"><div class="phase-num">04</div><div class="phase-name">Results</div></div>
+          <div class="phase-content">
+            <div class="phase-title">Room Winner Announcement</div>
+            <p class="phase-desc">After all presentations, judges calculate scores and announce the winning team in each room. The overall winner across all rooms (highest total stars) is announced at the Closing Ceremony. Total time per team: up to 40 minutes including Q&amp;A.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What a Strong Response Looks Like -->
+  <section style="background:var(--offwhite);padding:100px 0">
+    <div class="prog-inner">
+      <div class="prog-two-col">
+        <div class="reveal">
+          <div class="section-label">Strong Responses Include</div>
+          <h2 class="editorial-heading" style="margin-bottom:24px">What Judges Are Looking For</h2>
+          <div class="phase-detail-list" style="gap:12px">
+            <div class="phase-detail-item" style="font-size:14px">Clear problem diagnosis — not just symptoms</div>
+            <div class="phase-detail-item" style="font-size:14px">Defined target market and positioning strategy</div>
+            <div class="phase-detail-item" style="font-size:14px">Revenue model and cost considerations</div>
+            <div class="phase-detail-item" style="font-size:14px">Operational improvements — service speed, staffing, scaling</div>
+            <div class="phase-detail-item" style="font-size:14px">Risk assessment and mitigation plan</div>
+          </div>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <div class="section-label">Submission</div>
+          <h2 class="editorial-heading" style="margin-bottom:24px">Document Sharing</h2>
+          <p class="body-text" style="margin-bottom:16px">Before preparation begins, each team must share their Google Document (Business Plan) and Slide link (Canva / PowerPoint / Google Slides) with all 3 judges and the Judging Email.</p>
+          <div style="background:var(--navy);padding:24px;font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,0.7);line-height:1.8">
+            <div style="margin-bottom:10px"><span style="color:var(--accent-lt);font-weight:600">Phone:</span><br>+(60) 196098286</div>
+            <div style="margin-bottom:10px"><span style="color:var(--accent-lt);font-weight:600">Judging Email:</span><br>ffchallenge.j2026@gmail.com</div>
+            <div style="margin-bottom:10px"><span style="color:var(--accent-lt);font-weight:600">Support Email:</span><br>ffchallenge.s2026@gmail.com</div>
+            <div><span style="color:var(--accent-lt);font-weight:600">Subject format:</span><br>Team ID – Room Number – Division</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Award -->
+  <section style="background:var(--grey-lt);padding:80px 0">
+    <div class="prog-inner">
+      <div class="section-label reveal">Award</div>
+      <div class="award-display reveal">
+        <div class="award-display-name">🏆 The Future Founder Trophy</div>
+        <p class="award-display-desc">Presented to the team whose project demonstrates the greatest originality, scalability, and potential for real-world impact. The award honours visionaries who think beyond the present — those shaping tomorrow's innovations and entrepreneurial frontiers. This trophy symbolises imagination with direction, awarded to teams who not only create but also inspire others to dream bigger.</p>
+      </div>
+    </div>
+  </section>
+</div><!-- /innovators -->
+
+<!-- ══ ABOUT US PAGE ══ -->
+<div id="page-about" class="page">
+  <section class="about-hero">
+    <div class="page-hero-inner">
+      <div class="section-label light">About FFC</div>
+      <h1 class="page-hero-title">Built by<br>Students.<br>For Students.</h1>
+      <p class="page-hero-sub">Founded at POWIIS Balik Pulau, Penang. Aspiring to national and ASEAN reach.</p>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section style="background:var(--offwhite);padding:100px 0">
+    <div class="prog-inner">
+      <div class="reveal"><div class="section-label">What We Stand For</div><h2 class="section-heading" style="margin-bottom:48px">Values &amp;<br>Vision</h2></div>
+      <div class="about-values-grid">
+        <div class="about-value-card reveal"><div class="about-value-name">Innovation</div><p class="about-value-desc">We champion bold ideas and creative thinking, empowering young founders to design solutions that shape the future.</p></div>
+        <div class="about-value-card reveal reveal-delay-1"><div class="about-value-name">Leadership</div><p class="about-value-desc">We develop confident, ethical leaders who inspire and guide others toward a shared vision with purpose and clarity.</p></div>
+        <div class="about-value-card reveal reveal-delay-2"><div class="about-value-name">Collaboration</div><p class="about-value-desc">We foster teamwork across cultures and disciplines, believing that diverse perspectives spark the best ideas.</p></div>
+        <div class="about-value-card reveal reveal-delay-3"><div class="about-value-name">Resilience</div><p class="about-value-desc">We teach persistence and adaptability, turning every challenge into an opportunity for learning and growth.</p></div>
+        <div class="about-value-card reveal reveal-delay-4"><div class="about-value-name">Impact</div><p class="about-value-desc">We drive ventures that create meaningful, positive change for communities, the environment, and the economy.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Founder -->
+  <section class="founder-section">
+    <div class="founder-inner">
+      <div class="reveal">
+        <div class="founder-avatar">DC</div>
+        <!-- REPLACE with: <img src="darren-photo.jpg" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid var(--accent)"> -->
+      </div>
+      <div class="reveal reveal-delay-1">
+        <div class="founder-quote">"Welcome to the Future Founders' Challenge. This competition was created with a simple but powerful goal: to inspire students to think like innovators, entrepreneurs, and future leaders. I encourage every participant to approach this competition with curiosity, creativity, and courage. The goal is not only to win, but to grow."</div>
+        <div class="founder-name">Darren Chan — Founder &amp; Executive Director, FFC</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- History / Timeline -->
+  <section style="background:var(--offwhite);padding:100px 0">
+    <div class="prog-inner">
+      <div class="reveal"><div class="section-label">Our Story</div><h2 class="section-heading" style="margin-bottom:0">Timeline</h2></div>
+      <div class="history-timeline">
+        <div class="timeline-item reveal">
+          <div class="timeline-period">Feb – Apr</div>
+          <div class="timeline-content"><div class="timeline-title">Preparations &amp; Training</div><p class="timeline-desc">Launch of Thursday ECAs to train students in case studies, Shark Tank pitching, and speech debates. Development of the FFC Guidebook, branding, and judging rubrics. Internal POWIIS mock competitions to test logistics and prepare students.</p></div>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-period">May – Jul</div>
+          <div class="timeline-content"><div class="timeline-title">Competition Phase</div><p class="timeline-desc">Host the first official FFC competition, featuring Case Study Analysis, Business Debate, and the Innovators' Challenge. Invite partner schools across Penang and Malaysia. Award certificates and recognition signed by POWIIS leadership.</p></div>
+        </div>
+        <div class="timeline-item reveal">
+          <div class="timeline-period">Aug – Nov</div>
+          <div class="timeline-content"><div class="timeline-title">Reflection &amp; Expansion</div><p class="timeline-desc">Gather feedback from participants, judges, and teachers to refine the event. Publicise results through social media and external channels. Prepare groundwork for next year's FFC growth — scaling to more schools and ultimately ASEAN level.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacts -->
+  <section style="background:var(--grey-lt);padding:100px 0">
+    <div class="prog-inner">
+      <div class="reveal"><div class="section-label">Get in Touch</div><h2 class="section-heading" style="margin-bottom:48px">Contacts</h2></div>
+      <div class="contact-grid">
+        <div class="contact-card reveal">
+          <div class="contact-type">Direct Contact</div>
+          <div class="contact-name">Phone</div>
+          <p class="contact-detail">
+            For urgent competition-day queries or direct reach.<br><br>
+            <a href="tel:+60196098286">+(60) 196098286</a>
+          </p>
+        </div>
+        <div class="contact-card reveal reveal-delay-1">
+          <div class="contact-type">Judging &amp; Results</div>
+          <div class="contact-name">Judging Email</div>
+          <p class="contact-detail">
+            For judges submitting scores, document resources, and judging confirmations.<br><br>
+            <a href="mailto:ffchallenge.j2026@gmail.com">ffchallenge.j2026@gmail.com</a>
+          </p>
+        </div>
+        <div class="contact-card reveal">
+          <div class="contact-type">Technical &amp; Event Support</div>
+          <div class="contact-name">Support Email</div>
+          <p class="contact-detail">
+            For rule queries, technical issues, unfair Q&amp;A reports, and event-day support.<br><br>
+            <a href="mailto:ffchallenge.s2026@gmail.com">ffchallenge.s2026@gmail.com</a>
+          </p>
+        </div>
+        <div class="contact-card reveal reveal-delay-1">
+          <div class="contact-type">Administration</div>
+          <div class="contact-name">Department Email</div>
+          <p class="contact-detail">
+            For judge confirmations (required 2 days before competition) and administrative matters.<br><br>
+            <a href="mailto:ffchallenge.d2026@gmail.com">ffchallenge.d2026@gmail.com</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="background:var(--offwhite);padding:100px 0">
+    <div class="prog-inner">
+      <div class="reveal"><div class="section-label">FAQ</div><h2 class="section-heading" style="margin-bottom:0">Frequently Asked<br>Questions</h2></div>
+      <div class="faq-list" style="margin-top:48px">
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <div class="faq-q-text">Who can participate in FFC?</div>
+            <div class="faq-toggle">+</div>
+          </div>
+          <div class="faq-answer">FFC is open to secondary and pre-university students across Malaysia. Students must compete in teams of 3. All participants must be enrolled at a registered school at the time of competition.</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <div class="faq-q-text">How many events do teams compete in?</div>
+            <div class="faq-toggle">+</div>
+          </div>
+          <div class="faq-answer">FFC features three main events: Business Debate, Case Study Analysis, and the Innovators' Challenge. These are spread across two competition days. Teams can participate in all three events.</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <div class="faq-q-text">Is AI allowed during the competition?</div>
+            <div class="faq-toggle">+</div>
+          </div>
+          <div class="faq-answer">AI rules differ by event. In the Business Debate, ChatGPT is permitted only during the initial 15-minute research phase — final speeches must be original. In the Case Study Analysis, AI tools are strictly prohibited. In the Innovators' Challenge, AI may be used for research and calculations only — direct copying of AI-generated content is not permitted.</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <div class="faq-q-text">What awards are available?</div>
+            <div class="faq-toggle">+</div>
+          </div>
+          <div class="faq-answer">FFC offers event-specific awards (Market Persuaders Award, Analytical Excellence Award, Future Founder Trophy, Profit Pioneer Cup), a Startup Award (Honourable Mention), and the Titan of Industry Award for the overall best team across all events.</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <div class="faq-q-text">Can certificates be used for university applications?</div>
+            <div class="faq-toggle">+</div>
+          </div>
+          <div class="faq-answer">Yes. FFC provides recognised awards and certified achievements that enhance university and scholarship applications. Certificates are signed by POWIIS school leadership. Participation demonstrates leadership, innovation, and entrepreneurship to admissions officers.</div>
+        </div>
+        <div class="faq-item reveal">
+          <div class="faq-question" onclick="toggleFaq(this)">
+            <div class="faq-q-text">How do I register?</div>
+            <div class="faq-toggle">+</div>
+          </div>
+          <div class="faq-answer"><!-- REPLACE with actual registration details --> Registration details will be announced closer to the competition date. Please check back on this website or contact the FFC team at our general enquiry email for updates.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /about -->
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">FFC</div>
+        <div class="footer-brand-tag">Future Founders' Challenge</div>
+        <p class="footer-brand-desc">A student-led national entrepreneurship and leadership competition. Developing Thinkers. Creating Founders.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigation</div>
+        <div class="footer-link" onclick="showPage('home')">Home</div>
+        <div class="footer-link" onclick="showPage('programme')">The Programme</div>
+        <div class="footer-link" onclick="showPage('debate')">Business Debate</div>
+        <div class="footer-link" onclick="showPage('casestudy')">Case Study Analysis</div>
+        <div class="footer-link" onclick="showPage('innovators')">Innovators' Challenge</div>
+        <div class="footer-link" onclick="showPage('about')">About Us</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Events</div>
+        <div class="footer-link" onclick="showPage('debate')">Business Debate</div>
+        <div class="footer-link" onclick="showPage('casestudy')">Case Study Analysis</div>
+        <div class="footer-link" onclick="showPage('innovators')">Innovators' Challenge</div>
+        <div class="footer-link" onclick="showPage('programme')">Awards</div>
+        <div class="footer-link" onclick="showPage('programme')">Schedule</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <!-- REPLACE with actual contact details -->
+        <div class="footer-contact-item"><span>Phone</span>+(60) 196098286</div>
+        <div class="footer-contact-item"><span>Support</span>ffchallenge.s2026@gmail.com</div>
+        <div class="footer-contact-item"><span>Judging</span>ffchallenge.j2026@gmail.com</div>
+        <div class="footer-contact-item"><span>Department</span>ffchallenge.d2026@gmail.com</div>
+        <div class="footer-contact-item"><span>Location</span>POWIIS Balik Pulau, Penang, Malaysia</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Future Founders' Challenge. All rights reserved.</div>
+      <div class="footer-school">POWIIS Balik Pulau · Penang, Malaysia</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── PAGE ROUTING ───
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + pageId);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // update nav active state
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    // re-trigger scroll observer for new page
+    setTimeout(initObserver, 100);
+  }
+}
+
+// ─── MOBILE NAV ───
+let mobileOpen = false;
+function toggleMobileNav() {
+  mobileOpen = !mobileOpen;
+  const links = document.querySelector('.nav-links');
+  if (mobileOpen) {
+    links.style.display = 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '72px';
+    links.style.left = '0';
+    links.style.right = '0';
+    links.style.background = 'rgba(12,25,49,0.98)';
+    links.style.padding = '20px 24px 24px';
+    links.style.gap = '4px';
+    links.style.backdropFilter = 'blur(12px)';
+  } else {
+    links.style.display = '';
+  }
+}
+
+// ─── SCROLL REVEAL ───
+function initObserver() {
+  const reveals = document.querySelectorAll('.reveal:not(.visible)');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(r => obs.observe(r));
+}
+initObserver();
+
+// ─── FAQ TOGGLE ───
+function toggleFaq(questionEl) {
+  const item = questionEl.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ─── NAV SCROLL EFFECT ───
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('main-nav');
+  if (window.scrollY > 20) {
+    nav.style.boxShadow = '0 8px 40px rgba(0,0,0,0.3)';
+  } else {
+    nav.style.boxShadow = 'none';
+  }
+});
+
+// ─── INITIAL HERO ANIMATION ───
+document.addEventListener('DOMContentLoaded', () => {
+  initObserver();
+});
+</script>
+</body>
+</html>
