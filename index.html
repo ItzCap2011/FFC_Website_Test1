@@ -137,18 +137,27 @@ nav {
 .nav-dropdown {
   position: relative;
 }
+/* Bridge pseudo-element fills the gap so cursor never loses the menu */
+.nav-dropdown::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0; right: 0;
+  height: 12px;
+}
 .nav-dropdown-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 4px);
   left: 50%;
-  transform: translateX(-50%) translateY(-8px);
+  transform: translateX(-50%) translateY(-6px);
   background: var(--navy-mid);
   border: 1px solid rgba(255,255,255,0.08);
   border-top: 2px solid var(--royal-light);
-  width: 210px;
+  width: 220px;
   opacity: 0;
   pointer-events: none;
   transition: var(--transition);
+  padding-top: 4px;
 }
 .nav-dropdown:hover .nav-dropdown-menu {
   opacity: 1;
@@ -783,18 +792,22 @@ nav {
 .gallery-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: 280px 200px;
   gap: 4px;
   margin-top: 48px;
 }
 .gallery-cell {
   overflow: hidden;
+  aspect-ratio: 1 / 1;
 }
-.gallery-cell:first-child { grid-row: span 2; }
-.gallery-img {
+.gallery-cell:first-child {
+  grid-row: span 2;
+  aspect-ratio: unset; /* large cell spans 2 rows — not square, fills the space */
+}
+.gallery-cell img {
   width: 100%;
   height: 100%;
-  /* REPLACE with: <img src="event-photo.jpg" alt="..." style="width:100%;height:100%;object-fit:cover"> */
+  object-fit: cover;
+  display: block;
 }
 
 /* Videos Section */
@@ -990,7 +1003,61 @@ nav {
 }
 .award-card {
   border-top: 3px solid var(--accent);
-  padding-top: 24px;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  background: var(--white);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.award-card:hover {
+  box-shadow: 0 8px 40px rgba(12,25,49,0.1);
+}
+/* Hidden image panel — expands on hover */
+.award-card-img-wrap {
+  height: 0;
+  overflow: hidden;
+  background: var(--navy);
+  transition: height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.award-card:hover .award-card-img-wrap {
+  height: 200px;
+}
+.award-card-img-wrap img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              opacity 0.3s ease;
+  transform: translateY(-12px);
+  opacity: 0;
+}
+.award-card:hover .award-card-img-wrap img {
+  transform: translateY(0);
+  opacity: 1;
+}
+/* Fallback label when image is missing */
+.award-card-img-label {
+  font-family: var(--font-body);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  text-align: center;
+  position: absolute;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+.award-card-img-wrap img:not([src=""]) ~ .award-card-img-label {
+  display: none;
+}
+.award-card-content {
+  padding: 24px 28px 28px;
 }
 .award-card-event {
   font-family: var(--font-body);
@@ -1185,81 +1252,90 @@ nav {
   display: flex;
   flex-direction: column;
   gap: 0;
-  margin-top: 48px;
+  margin-top: 64px;
 }
 .phase-item {
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 40px;
-  padding: 40px 0;
-  border-bottom: 1px solid var(--grey-lt);
+  grid-template-columns: 220px 1fr;
+  gap: 0;
+  border-top: 1px solid var(--grey-lt);
+  padding: 48px 0;
   position: relative;
 }
-.phase-item::before {
+.phase-item::after {
   content: '';
   position: absolute;
-  left: 199px;
+  left: 220px;
   top: 0; bottom: 0;
   width: 1px;
   background: var(--grey-lt);
 }
 .phase-label {
+  padding-right: 48px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  justify-content: flex-start;
 }
 .phase-num {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 56px;
-  color: var(--grey-lt);
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--grey-mid);
   line-height: 1;
-  letter-spacing: -1px;
 }
 .phase-name {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 13px;
+  font-weight: 800;
+  font-size: 22px;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--royal);
-}
-.phase-content {}
-.phase-title {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 24px;
+  letter-spacing: 0.5px;
   color: var(--navy);
-  margin-bottom: 14px;
+  line-height: 1;
+}
+.phase-content {
+  padding-left: 48px;
+}
+.phase-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 32px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--navy);
+  margin-bottom: 16px;
+  line-height: 1;
 }
 .phase-desc {
   font-family: var(--font-body);
-  font-size: 14px;
-  line-height: 1.75;
+  font-size: 14.5px;
+  line-height: 1.8;
   color: var(--grey-dark);
 }
 .phase-detail-list {
-  margin-top: 16px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 .phase-detail-item {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
   font-family: var(--font-body);
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--grey-dark);
-  line-height: 1.6;
+  line-height: 1.65;
 }
 .phase-detail-item::before {
   content: '';
-  width: 16px;
+  width: 20px;
   height: 1px;
   background: var(--royal);
   flex-shrink: 0;
-  margin-top: 10px;
+  margin-top: 11px;
 }
 
 /* Judging rubric */
@@ -1311,19 +1387,52 @@ nav {
 /* Award display */
 .award-display {
   background: var(--navy);
-  padding: 56px 48px;
   margin-top: 48px;
   position: relative;
   overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  gap: 0;
+  min-height: 280px;
 }
 .award-display::before {
   content: '★';
   position: absolute;
-  right: -20px;
-  top: -20px;
-  font-size: 200px;
-  color: rgba(255,255,255,0.03);
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 480px;
+  font-size: 320px;
+  color: rgba(255,255,255,0.055);
   line-height: 1;
+  pointer-events: none;
+  z-index: 1;
+  text-align: center;
+}
+.award-display-text {
+  padding: 52px 40px 52px 48px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.award-display-img {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+.award-display-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: transparent;
+  position: relative;
+  z-index: 3;
 }
 .award-display-name {
   font-family: var(--font-display);
@@ -1541,18 +1650,13 @@ nav {
   align-items: center;
 }
 .founder-avatar {
-  width: 120px; height: 120px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  background: var(--royal);
-  border: 3px solid var(--accent);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-size: 40px;
-  font-weight: 800;
-  color: white;
-  /* REPLACE with actual photo */
+  object-fit: cover;
+  border: 3px solid var(--royal-light);
+  display: block;
+  flex-shrink: 0;
 }
 .founder-quote {
   font-family: var(--font-serif);
@@ -1692,8 +1796,10 @@ footer {
   .nav-hamburger { display: flex; }
   .timetable-row { grid-template-columns: 90px 1fr; }
   .timetable-location { display: none; }
-  .phase-item { grid-template-columns: 1fr; gap: 16px; }
-  .phase-item::before { display: none; }
+  .phase-item { grid-template-columns: 1fr; }
+  .phase-item::after { display: none; }
+  .phase-content { padding-left: 0; padding-top: 16px; }
+  .phase-label { padding-right: 0; }
   .timeline-item { grid-template-columns: 1fr; gap: 8px; }
   .event-hero-inner { grid-template-columns: 1fr; }
   .founder-inner { grid-template-columns: 1fr; text-align: center; }
@@ -1919,27 +2025,27 @@ footer {
         <div class="gallery-cell reveal">
           <!-- PHOTO 1 — replace src with your image, e.g. FFC_example_pic1.jpg -->
           <img src="FFC_example_pic1.png" alt="FFC Event Photo 1" style="width:100%;height:100%;object-fit:cover"
-               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\' style=\'height:100%\'><div class=\'img-placeholder-label\'>📷 FFC_example_pic1</div></div>'">
+               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\' style=\'height:100%\'><div class=\'img-placeholder-label\'>FFC_example_pic1</div></div>'">
         </div>
         <div class="gallery-cell reveal reveal-delay-1">
           <!-- PHOTO 2 — replace src with your image, e.g. FFC_example_pic2.jpg -->
           <img src="FFC_example_pic2.png" alt="FFC Event Photo 2" style="width:100%;height:100%;object-fit:cover"
-               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\' style=\'height:100%\'><div class=\'img-placeholder-label\'>📷 FFC_example_pic2</div></div>'">
+               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\' style=\'height:100%\'><div class=\'img-placeholder-label\'>FFC_example_pic2</div></div>'">
         </div>
         <div class="gallery-cell reveal reveal-delay-2">
           <!-- PHOTO 3 — replace src with your image, e.g. FFC_example_pic3.jpg -->
           <img src="FFC_example_pic3.png" alt="FFC Event Photo 3" style="width:100%;height:100%;object-fit:cover"
-               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\' style=\'height:100%\'><div class=\'img-placeholder-label\'>📷 FFC_example_pic3</div></div>'">
+               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\' style=\'height:100%\'><div class=\'img-placeholder-label\'>FFC_example_pic3</div></div>'">
         </div>
         <div class="gallery-cell reveal reveal-delay-2">
           <!-- PHOTO 4 — replace src with your image, e.g. FFC_example_pic4.jpg -->
           <img src="FFC_example_pic4.png" alt="FFC Event Photo 4" style="width:100%;height:100%;object-fit:cover"
-               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\' style=\'height:100%\'><div class=\'img-placeholder-label\'>📷 FFC_example_pic4</div></div>'">
+               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\' style=\'height:100%\'><div class=\'img-placeholder-label\'>FFC_example_pic4</div></div>'">
         </div>
         <div class="gallery-cell reveal reveal-delay-3">
           <!-- PHOTO 5 — replace src with your image, e.g. FFC_example_pic5.jpg -->
           <img src="FFC_example_pic5.png" alt="FFC Event Photo 5" style="width:100%;height:100%;object-fit:cover"
-               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\' style=\'height:100%\'><div class=\'img-placeholder-label\'>📷 FFC_example_pic5</div></div>'">
+               onerror="this.parentElement.innerHTML='<div class=\'img-placeholder\' style=\'height:100%\'><div class=\'img-placeholder-label\'>FFC_example_pic5</div></div>'">
         </div>
       </div>
     </div>
@@ -1959,7 +2065,7 @@ footer {
            ═══════════════════════════════════════════════════════ -->
       <div class="videos-grid">
 
-        <!-- ▶ YOUTUBE EMBED 1 — swap src to change this video -->
+        <!-- YOUTUBE EMBED 1 — swap src to change this video -->
         <div class="reveal reveal-delay-1" style="grid-column:span 1">
           <iframe
             style="width:100%;aspect-ratio:16/9;display:block;border:0"
@@ -1971,7 +2077,7 @@ footer {
           </iframe>
         </div>
 
-        <!-- ▶ YOUTUBE EMBED 2 — swap src to change this video -->
+        <!-- YOUTUBE EMBED 2 — swap src to change this video -->
         <div class="reveal reveal-delay-2" style="grid-column:span 1">
           <iframe
             style="width:100%;aspect-ratio:16/9;display:block;border:0"
@@ -1983,7 +2089,7 @@ footer {
           </iframe>
         </div>
 
-        <!-- ▶ YOUTUBE EMBED 3 — swap src to change this video -->
+        <!-- YOUTUBE EMBED 3 — swap src to change this video -->
         <div class="reveal reveal-delay-3" style="grid-column:span 2">
           <iframe
             style="width:100%;aspect-ratio:16/9;display:block;border:0"
@@ -2036,7 +2142,7 @@ footer {
           <div class="section-label">Introduction</div>
           <h2 class="editorial-heading" style="margin-bottom:28px">The Future Founders' Challenge</h2>
           <p class="body-text" style="margin-bottom:20px">The Future Founders' Challenge (FFC) is a student-led national entrepreneurship and leadership competition founded at POWIIS, Penang. Inspired by the spirit of global business challenges such as DECA, it is designed to equip secondary and pre-university students across Malaysia with the skills needed to excel in innovation, leadership, collaboration, resilience, and social impact.</p>
-          <p class="body-text">FFC features business pitch competitions, case study analysis, and debating challenges. It provides participants with recognised awards and certified achievements that enhance university and scholarship applications. Top-performing teams may represent Malaysia in international virtual competitions, connecting them with a global network of young innovators.</p>
+          <p class="body-text">FFC features three competitive academic events — Business Debate, Case Study Analysis, and the Innovators' Challenge. It provides participants with recognised awards and certified achievements that enhance university and scholarship applications. Top-performing teams may represent Malaysia in international virtual competitions, connecting them with a global network of young innovators.</p>
         </div>
         <div class="reveal reveal-delay-1">
           <div class="section-label">Vision</div>
@@ -2113,36 +2219,157 @@ footer {
         <h2 class="section-heading" style="margin-bottom:48px">Awards &amp;<br>Honours</h2>
       </div>
       <div class="prog-three-col">
+
+        <!-- ROW 1, LEFT: Silver & Gold Medals -->
         <div class="award-card reveal">
-          <div class="award-card-event">Business Debate</div>
-          <div class="award-card-name">The Market Persuaders Award</div>
-          <p class="award-card-desc">Awarded to the most convincing debate team that demonstrates mastery in communication, logic, and business strategy. Teams must exhibit professionalism, confidence, and the ability to persuade using real-world economic reasoning.</p>
+          <!-- AWARD IMAGE — file: FFC_award_medals.png (transparent bg, square) -->
+          <div class="award-card-img-wrap">
+            <img src="FFC_award_medals.png" alt="Silver and Gold Medals"
+                 onerror="this.style.display='none'">
+            <div class="award-card-img-label">FFC_award_medals.png</div>
+          </div>
+          <div class="award-card-content">
+            <div class="award-card-event">Achievement Tiers</div>
+            <div class="award-card-name">Silver &amp; Gold Medals</div>
+            <p class="award-card-desc">Awarded based on overall star performance across events. Gold Medal: 22–25 Stars. Silver Medal: 18–21 Stars. These tiers recognise consistent excellence in analysis, strategy, and presentation throughout the competition.</p>
+          </div>
         </div>
+
+        <!-- ROW 1, MIDDLE: Market Persuaders -->
         <div class="award-card reveal reveal-delay-1">
-          <div class="award-card-event">Case Study Analysis</div>
-          <div class="award-card-name">The Analytical Excellence Award</div>
-          <p class="award-card-desc">Given to the team that delivers the most well-reasoned and strategic solution to a complex business challenge. Winners are recognised for their ability to analyse, adapt, and provide actionable recommendations under pressure.</p>
+          <!-- AWARD IMAGE — file: FFC_award_debate.png (transparent bg, square) -->
+          <div class="award-card-img-wrap">
+            <img src="FFC_award_debate.png" alt="Market Persuaders Award"
+                 onerror="this.style.display='none'">
+            <div class="award-card-img-label">FFC_award_debate.png</div>
+          </div>
+          <div class="award-card-content">
+            <div class="award-card-event">Business Debate</div>
+            <div class="award-card-name">The Market Persuaders Award</div>
+            <p class="award-card-desc">Awarded to the most convincing debate team that demonstrates mastery in communication, logic, and business strategy. Teams must exhibit professionalism, confidence, and the ability to persuade using real-world economic reasoning.</p>
+          </div>
         </div>
+
+        <!-- ROW 1, RIGHT: Analytical Excellence -->
         <div class="award-card reveal reveal-delay-2">
-          <div class="award-card-event">Innovators' Challenge</div>
-          <div class="award-card-name">The Future Founder Trophy</div>
-          <p class="award-card-desc">Presented to the team whose project demonstrates the greatest originality, scalability, and potential for real-world impact. Awarded to visionaries who think beyond the present — those shaping tomorrow's entrepreneurial frontiers.</p>
+          <!-- AWARD IMAGE — file: FFC_award_casestudy.png (transparent bg, square) -->
+          <div class="award-card-img-wrap">
+            <img src="FFC_award_casestudy.png" alt="Analytical Excellence Award"
+                 onerror="this.style.display='none'">
+            <div class="award-card-img-label">FFC_award_casestudy.png</div>
+          </div>
+          <div class="award-card-content">
+            <div class="award-card-event">Case Study Analysis</div>
+            <div class="award-card-name">The Analytical Excellence Award</div>
+            <p class="award-card-desc">Given to the team that delivers the most well-reasoned and strategic solution to a complex business challenge. Winners are recognised for their ability to analyse, adapt, and provide actionable recommendations under pressure.</p>
+          </div>
         </div>
+
+        <!-- ROW 2, LEFT: Future Founder Trophy -->
         <div class="award-card reveal">
-          <div class="award-card-event">Written Business Plan</div>
-          <div class="award-card-name">The Profit Pioneer Cup</div>
-          <p class="award-card-desc">Awarded to the competitor who presents the most visionary and feasible business plan, combining creativity with sustainability. Honours participants who transform imagination into enterprise.</p>
+          <!-- AWARD IMAGE — file: FFC_award_innovators.png (transparent bg, square) -->
+          <div class="award-card-img-wrap">
+            <img src="FFC_award_innovators.png" alt="Future Founder Trophy"
+                 onerror="this.style.display='none'">
+            <div class="award-card-img-label">FFC_award_innovators.png</div>
+          </div>
+          <div class="award-card-content">
+            <div class="award-card-event">Innovators' Challenge</div>
+            <div class="award-card-name">The Future Founder Trophy</div>
+            <p class="award-card-desc">Presented to the team whose project demonstrates the greatest originality, scalability, and potential for real-world impact. Awarded to visionaries who think beyond the present — those shaping tomorrow's entrepreneurial frontiers.</p>
+          </div>
         </div>
+
+        <!-- ROW 2, MIDDLE: Startup Award -->
         <div class="award-card reveal reveal-delay-1">
-          <div class="award-card-event">Honourable Mention</div>
-          <div class="award-card-name">The Startup Award</div>
-          <p class="award-card-desc">Recognises participants who showed creativity and effort but did not place in medal tiers. Celebrates promising young entrepreneurs at the very start of their innovation journey.</p>
+          <!-- AWARD IMAGE — file: FFC_award_startup.png (transparent bg, square) -->
+          <div class="award-card-img-wrap">
+            <img src="FFC_award_startup.png" alt="Startup Award"
+                 onerror="this.style.display='none'">
+            <div class="award-card-img-label">FFC_award_startup.png</div>
+          </div>
+          <div class="award-card-content">
+            <div class="award-card-event">Honourable Mention</div>
+            <div class="award-card-name">The Startup Award</div>
+            <p class="award-card-desc">Recognises participants who showed creativity and effort but did not place in medal tiers. Celebrates promising young entrepreneurs at the very start of their innovation journey.</p>
+          </div>
         </div>
+
+        <!-- ROW 2, RIGHT: Titan of Industry -->
         <div class="award-card reveal reveal-delay-2" style="border-top-color:var(--gold)">
-          <div class="award-card-event" style="color:var(--gold)">Overall Best Team</div>
-          <div class="award-card-name">Titan of Industry Award</div>
-          <p class="award-card-desc">Awarded to the highest-performing team across all events. The ultimate honour at FFC, symbolising the complete entrepreneur — visionary, strategic, and unshakably collaborative.</p>
+          <!-- AWARD IMAGE — file: FFC_award_titan.png (transparent bg, square) -->
+          <div class="award-card-img-wrap" style="background:linear-gradient(135deg,#1a2d4a,#0c1931)">
+            <img src="FFC_award_titan.png" alt="Titan of Industry Award"
+                 onerror="this.style.display='none'">
+            <div class="award-card-img-label">FFC_award_titan.png</div>
+          </div>
+          <div class="award-card-content">
+            <div class="award-card-event" style="color:var(--gold)">Overall Best Team</div>
+            <div class="award-card-name">Titan of Industry Award</div>
+            <p class="award-card-desc">Awarded to the highest-performing team across all events. The ultimate honour at FFC, symbolising the complete entrepreneur — visionary, strategic, and unshakably collaborative.</p>
+          </div>
         </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FFC Resources -->
+  <section class="prog-section" style="background:var(--navy)">
+    <div class="prog-inner">
+      <div class="prog-two-col" style="align-items:start">
+
+        <div class="reveal">
+          <div class="section-label light">Preparation</div>
+          <h2 class="section-heading light" style="margin-bottom:24px">FFC<br>Resources</h2>
+          <p class="body-text light" style="margin-bottom:32px">The FFC Resource Book is a structured collection of business knowledge designed specifically for students preparing for the Future Founders Challenge. It is not a textbook, and it is not meant for memorisation — it is a tool to help students think, analyse, and make decisions like real entrepreneurs.</p>
+          <a href="https://docs.google.com/document/d/1KNMYyPFDFF-zN8Xh2jNwRcLkpHhnMYZ0RNEgvLYkiB8/edit?usp=sharing"
+             target="_blank" rel="noopener noreferrer"
+             style="display:inline-flex;align-items:center;gap:12px;font-family:var(--font-display);font-weight:700;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:white;background:var(--royal);padding:16px 32px;cursor:pointer;transition:all 0.35s ease;text-decoration:none"
+             onmouseover="this.style.background='var(--royal-light)'"
+             onmouseout="this.style.background='var(--royal)'">
+            <span>View Resource Book</span>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </a>
+        </div>
+
+        <div class="reveal reveal-delay-1">
+          <!-- Core Purpose -->
+          <div style="margin-bottom:40px">
+            <div style="font-family:var(--font-display);font-weight:800;font-size:20px;text-transform:uppercase;letter-spacing:0.5px;color:white;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.1)">Core Purpose</div>
+            <p style="font-family:var(--font-body);font-size:14px;line-height:1.75;color:rgba(255,255,255,0.6);margin-bottom:16px">This resource trains students to break down complex business situations, identify root problems instead of surface issues, compare strategic options, and justify decisions with clear reasoning.</p>
+            <p style="font-family:var(--font-body);font-size:14px;line-height:1.75;color:rgba(255,255,255,0.6)">In FFC, success does not come from knowing definitions. It comes from being able to analyse a situation and explain why one approach is better than another.</p>
+          </div>
+
+          <!-- What It Contains -->
+          <div style="margin-bottom:40px">
+            <div style="font-family:var(--font-display);font-weight:800;font-size:20px;text-transform:uppercase;letter-spacing:0.5px;color:white;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.1)">What It Contains</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:14px;align-items:flex-start">
+                <div style="width:20px;height:1px;background:var(--royal-light);flex-shrink:0;margin-top:10px"></div>
+                <div style="font-family:var(--font-body);font-size:14px;color:rgba(255,255,255,0.6);line-height:1.65">Business models — B2B, Marketplace, Platform, Freemium, and more</div>
+              </div>
+              <div style="display:flex;gap:14px;align-items:flex-start">
+                <div style="width:20px;height:1px;background:var(--royal-light);flex-shrink:0;margin-top:10px"></div>
+                <div style="font-family:var(--font-body);font-size:14px;color:rgba(255,255,255,0.6);line-height:1.65">Ownership structures and funding strategies</div>
+              </div>
+              <div style="display:flex;gap:14px;align-items:flex-start">
+                <div style="width:20px;height:1px;background:var(--royal-light);flex-shrink:0;margin-top:10px"></div>
+                <div style="font-family:var(--font-body);font-size:14px;color:rgba(255,255,255,0.6);line-height:1.65">Marketing, customer strategies, and operational decisions</div>
+              </div>
+              <div style="display:flex;gap:14px;align-items:flex-start">
+                <div style="width:20px;height:1px;background:var(--royal-light);flex-shrink:0;margin-top:10px"></div>
+                <div style="font-family:var(--font-body);font-size:14px;color:rgba(255,255,255,0.6);line-height:1.65">Real-world case studies and conflicting strategic trade-offs</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Final Note -->
+          <div style="border-left:3px solid var(--royal-light);padding-left:24px">
+            <p style="font-family:var(--font-serif);font-size:17px;font-style:italic;color:rgba(255,255,255,0.75);line-height:1.65">Students who read it passively may understand the content. Students who read it actively — questioning, analysing, and reflecting — will develop the ability to apply that knowledge effectively. In FFC, that difference is what separates participation from winning.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -2152,7 +2379,7 @@ footer {
     <div class="prog-inner">
       <div class="reveal">
         <div class="section-label">Schedule</div>
-        <h2 class="section-heading" style="margin-bottom:48px">Competition<br>Calendar</h2>
+        <h2 class="section-heading" style="margin-bottom:48px">Sample Competition<br>Time Schedule</h2>
       </div>
       <!-- REGISTER LINK -->
       <div class="prog-two-col">
@@ -2201,7 +2428,7 @@ footer {
         </div>
         <div class="reveal reveal-delay-1" style="display:flex;align-items:center;justify-content:center">
           <!-- REPLACE with: <img src="ffc-mascot.png" alt="FFC Polar Bear Mascot" style="max-width:320px"> -->
-          <div style="width:280px;height:280px;background:var(--royal);border-radius:50%;border:4px solid var(--royal-light);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:80px;color:white;letter-spacing:-2px">🐻‍❄️</div>
+          <div style="width:280px;height:280px;background:var(--royal);border-radius:50%;border:4px solid var(--royal-light);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:80px;color:white;letter-spacing:-2px">FFC</div>
         </div>
       </div>
     </div>
@@ -2261,23 +2488,32 @@ footer {
       </div>
       <div class="phase-list">
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">01</div><div class="phase-name">Phase One</div></div>
+          <div class="phase-label">
+            <div class="phase-num">Phase 01</div>
+            <div class="phase-name">Orientation<br>&amp; Setup</div>
+          </div>
           <div class="phase-content">
-            <div class="phase-title">Orientation &amp; Setup</div>
+            <div class="phase-title">Getting Into the Room</div>
             <p class="phase-desc">Teams convene in the auditorium to receive their Debate Tree, which details assigned rooms, opponents, and stance (Affirmative or Negative) for each round. Upon entering the debate room, teams introduce themselves to the adjudicator. This is the only time electronic devices may be used for research.</p>
           </div>
         </div>
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">02</div><div class="phase-name">Phase Two</div></div>
+          <div class="phase-label">
+            <div class="phase-num">Phase 02</div>
+            <div class="phase-name">Preparation</div>
+          </div>
           <div class="phase-content">
-            <div class="phase-title">Preparation — 15 Minutes</div>
+            <div class="phase-title">15 Minutes to Build Your Case</div>
             <p class="phase-desc">The adjudicator reveals the specific business case or motion. Teams have a 15-minute block to map out their strategy, draft speeches, and find evidence. After this window, all electronic devices must be put away — all following notes must be on paper.</p>
           </div>
         </div>
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">03</div><div class="phase-name">Phase Three</div></div>
+          <div class="phase-label">
+            <div class="phase-num">Phase 03</div>
+            <div class="phase-name">The Debate<br>Round</div>
+          </div>
           <div class="phase-content">
-            <div class="phase-title">The Debate Round</div>
+            <div class="phase-title">Six Speakers. Alternating. Under Pressure.</div>
             <p class="phase-desc">The debate follows a strict alternating order. Each speaker has up to 4 minutes to deliver their points. Between each speech, both teams receive a 60-second buffer to adjust rebuttals.</p>
             <div class="phase-detail-list">
               <div class="phase-detail-item">1st Leader speaks (4 min)</div>
@@ -2290,9 +2526,12 @@ footer {
           </div>
         </div>
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">04</div><div class="phase-name">Phase Four</div></div>
+          <div class="phase-label">
+            <div class="phase-num">Phase 04</div>
+            <div class="phase-name">Feedback<br>&amp; Results</div>
+          </div>
           <div class="phase-content">
-            <div class="phase-title">Feedback &amp; Results</div>
+            <div class="phase-title">Decision &amp; Debrief</div>
             <p class="phase-desc">Following the final speech, teams have 90 seconds to prepare a 90-second constructive feedback session for opponents. The adjudicator then deliberates and announces the winner based on depth of business analysis, feasibility, and communication effectiveness.</p>
           </div>
         </div>
@@ -2300,32 +2539,93 @@ footer {
     </div>
   </section>
 
-  <!-- Rules & Debate Tree -->
+  <!-- Rules -->
   <section style="background:var(--offwhite);padding:100px 0">
     <div class="prog-inner">
       <div class="prog-two-col">
         <div class="reveal">
           <div class="section-label">Key Rules</div>
-          <h2 class="editorial-heading" style="margin-bottom:28px">Regulations</h2>
-          <div style="display:flex;flex-direction:column;gap:16px">
-            <div class="phase-detail-item" style="font-size:14px;color:var(--ink)">One Point of Information (POI) per student, directed at their direct counterpart in the opposing team.</div>
-            <div class="phase-detail-item" style="font-size:14px;color:var(--ink)">Speeches are recorded. ChatGPT is allowed only during the initial 15-minute research phase. Final speeches must be the students' original work — AI detectors will be used during review.</div>
-            <div class="phase-detail-item" style="font-size:14px;color:var(--ink)">The Debate Tree (Bull/Bear paths) determines team progression across rounds. Bull path = win (Affirmative). Bear path = loss (Negative).</div>
-            <div class="phase-detail-item" style="font-size:14px;color:var(--ink)">Professional conduct must be maintained at all times. Disrespect to opponents or judges may result in disqualification.</div>
+          <h2 class="section-heading" style="margin-bottom:40px">Regulations</h2>
+          <div style="display:flex;flex-direction:column;gap:0">
+            <div style="padding:24px 0;border-bottom:1px solid var(--grey-lt);display:grid;grid-template-columns:20px 1fr;gap:16px;align-items:start">
+              <div style="width:20px;height:1px;background:var(--royal);margin-top:10px;flex-shrink:0"></div>
+              <div style="font-family:var(--font-body);font-size:14.5px;line-height:1.75;color:var(--ink)">One Point of Information (POI) allowed per student, directed at their direct counterpart in the opposing team.</div>
+            </div>
+            <div style="padding:24px 0;border-bottom:1px solid var(--grey-lt);display:grid;grid-template-columns:20px 1fr;gap:16px;align-items:start">
+              <div style="width:20px;height:1px;background:var(--royal);margin-top:10px;flex-shrink:0"></div>
+              <div style="font-family:var(--font-body);font-size:14.5px;line-height:1.75;color:var(--ink)">Speeches are recorded. ChatGPT is allowed only during the initial 15-minute research phase. Final speeches must be the students' original work — AI detectors will be used during review.</div>
+            </div>
+            <div style="padding:24px 0;border-bottom:1px solid var(--grey-lt);display:grid;grid-template-columns:20px 1fr;gap:16px;align-items:start">
+              <div style="width:20px;height:1px;background:var(--royal);margin-top:10px;flex-shrink:0"></div>
+              <div style="font-family:var(--font-body);font-size:14.5px;line-height:1.75;color:var(--ink)">The Debate Tree determines team progression. Bull path = win. Bear path = loss. Teams are assigned Affirmative or Negative stances per round.</div>
+            </div>
+            <div style="padding:24px 0;display:grid;grid-template-columns:20px 1fr;gap:16px;align-items:start">
+              <div style="width:20px;height:1px;background:var(--royal);margin-top:10px;flex-shrink:0"></div>
+              <div style="font-family:var(--font-body);font-size:14.5px;line-height:1.75;color:var(--ink)">Professional conduct must be maintained at all times. Disrespect to opponents or judges may result in immediate disqualification.</div>
+            </div>
           </div>
         </div>
         <div class="reveal reveal-delay-1">
-          <div class="section-label">The Debate Tree</div>
-          <h2 class="editorial-heading" style="margin-bottom:16px">Match Progression</h2>
-          <p class="body-text" style="margin-bottom:24px">The Debate Tree is FFC's structured match progression system. Teams move through rounds based on performance — Bull path after a win, Bear path after a loss.</p>
-          <div style="background:var(--navy);padding:28px;font-family:var(--font-body);font-size:13px;line-height:1.8;color:rgba(255,255,255,0.7)">
-            <div style="color:var(--accent-lt);font-weight:600;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;font-size:11px">Key Terms</div>
-            <div><strong style="color:white">Leader</strong> — Team defending or supporting the motion</div>
-            <div><strong style="color:white">Challenger</strong> — Team opposing the motion</div>
-            <div><strong style="color:var(--accent-lt)">Bull Path</strong> — Advancement after a win (Affirmative)</div>
-            <div><strong style="color:#c0392b">Bear Path</strong> — Redirection after a loss (Negative)</div>
-            <div><strong style="color:white">Team Code</strong> — Unique identifier (e.g. A067) for tracking</div>
+          <div class="section-label">Glossary</div>
+          <h2 class="section-heading" style="margin-bottom:40px">Key Terms</h2>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="background:var(--navy);padding:20px 24px;display:flex;justify-content:space-between;align-items:baseline;gap:16px">
+              <div style="font-family:var(--font-display);font-weight:800;font-size:16px;text-transform:uppercase;letter-spacing:0.5px;color:white">Leader</div>
+              <div style="font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,0.55);text-align:right">Defends or supports the motion</div>
+            </div>
+            <div style="background:var(--navy-mid);padding:20px 24px;display:flex;justify-content:space-between;align-items:baseline;gap:16px">
+              <div style="font-family:var(--font-display);font-weight:800;font-size:16px;text-transform:uppercase;letter-spacing:0.5px;color:white">Challenger</div>
+              <div style="font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,0.55);text-align:right">Opposes the motion</div>
+            </div>
+            <div style="background:var(--navy-mid);padding:20px 24px;display:flex;justify-content:space-between;align-items:baseline;gap:16px">
+              <div style="font-family:var(--font-display);font-weight:800;font-size:16px;text-transform:uppercase;letter-spacing:0.5px;color:white">Bull Path</div>
+              <div style="font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,0.55);text-align:right">Advancement after a win</div>
+            </div>
+            <div style="background:var(--accent);padding:20px 24px;display:flex;justify-content:space-between;align-items:baseline;gap:16px">
+              <div style="font-family:var(--font-display);font-weight:800;font-size:16px;text-transform:uppercase;letter-spacing:0.5px;color:white">Bear Path</div>
+              <div style="font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,0.55);text-align:right">Redirection after a loss</div>
+            </div>
+            <div style="background:var(--navy);padding:20px 24px;display:flex;justify-content:space-between;align-items:baseline;gap:16px">
+              <div style="font-family:var(--font-display);font-weight:800;font-size:16px;text-transform:uppercase;letter-spacing:0.5px;color:white">Team Code</div>
+              <div style="font-family:var(--font-body);font-size:13px;color:rgba(255,255,255,0.55);text-align:right">Unique ID (e.g. A067) for tracking</div>
+            </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Debate Tree Visual -->
+  <section style="background:var(--navy);padding:100px 0">
+    <div class="prog-inner">
+      <div class="reveal">
+        <div class="section-label light">Match Progression</div>
+        <h2 class="section-heading light" style="margin-bottom:16px">The Debate Tree</h2>
+        <p class="body-text light" style="max-width:640px;margin-bottom:64px">The Debate Tree is FFC's structured match progression system — it visually maps how teams move through debate rounds based on performance, ensuring fairness, strategy, and competitive balance across all three rounds.</p>
+      </div>
+      <!-- Debate Tree Image -->
+      <!-- DEBATE TREE IMAGE — file: FFC_DebateTree.png (transparent background) -->
+      <div class="reveal" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:48px;display:flex;justify-content:center;align-items:center">
+        <img src="FFC_DebateTree.png" alt="FFC Debate Tree diagram" style="max-width:100%;height:auto;display:block"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div style="display:none;flex-direction:column;align-items:center;gap:12px;padding:60px 0">
+          <div style="font-family:var(--font-display);font-size:13px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3)">Debate Tree Diagram</div>
+          <div style="font-family:var(--font-body);font-size:12px;color:rgba(255,255,255,0.2)">Place FFC_DebateTree.png in the same folder as this HTML file</div>
+        </div>
+      </div>
+      <!-- How to read the tree -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:2px" class="reveal">
+        <div style="background:rgba(255,255,255,0.05);padding:28px 24px;border-top:2px solid var(--royal-light)">
+          <div style="font-family:var(--font-display);font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:white;margin-bottom:10px">Round 1</div>
+          <p style="font-family:var(--font-body);font-size:13px;line-height:1.7;color:rgba(255,255,255,0.5)">Each team starts at their assigned room with a designated Leader or Challenger role. Room codes (e.g. A102) are shown on the tree.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);padding:28px 24px;border-top:2px solid var(--royal)">
+          <div style="font-family:var(--font-display);font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:white;margin-bottom:10px">Round 2 Pathing</div>
+          <p style="font-family:var(--font-body);font-size:13px;line-height:1.7;color:rgba(255,255,255,0.5)">Win → Bull path, stay in or advance to the next room. Loss → Bear path, move to the alternative room and switch role.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.05);padding:28px 24px;border-top:2px solid var(--accent-lt)">
+          <div style="font-family:var(--font-display);font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:1px;color:white;margin-bottom:10px">Round 3 Finals</div>
+          <p style="font-family:var(--font-body);font-size:13px;line-height:1.7;color:rgba(255,255,255,0.5)">Your Round 2 result sends you to a final room. Overall standings are calculated from performance across all three rounds.</p>
         </div>
       </div>
     </div>
@@ -2337,8 +2637,15 @@ footer {
       <div class="section-label reveal">Award</div>
       <h2 class="section-heading reveal" style="margin-bottom:24px">The Market<br>Persuaders Award</h2>
       <div class="award-display reveal">
-        <div class="award-display-name">🏆 The Market Persuaders Award</div>
-        <p class="award-display-desc">Awarded to the most convincing debate team that demonstrates mastery in communication, logic, and business strategy. Teams must exhibit professionalism, confidence, and the ability to persuade using real-world economic and entrepreneurial reasoning. This award celebrates teams that can influence through ideas — reflecting how communication drives success in real business negotiations.</p>
+          <div class="award-display-text">
+            <div class="award-display-name">The Market Persuaders Award</div>
+            <p class="award-display-desc">Awarded to the most convincing debate team that demonstrates mastery in communication, logic, and business strategy. Teams must exhibit professionalism, confidence, and the ability to persuade using real-world economic and entrepreneurial reasoning. This award celebrates teams that can influence through ideas — reflecting how communication drives success in real business negotiations.</p>
+          </div>
+          <!-- TROPHY IMAGE — file: FFC_award_debate_trans.png (transparent background, square) -->
+          <div class="award-display-img">
+            <img src="FFC_award_debate_trans.png" alt="Market Persuaders Award Trophy"
+                 onerror="this.style.display='none'">
+          </div>
       </div>
     </div>
   </section>
@@ -2362,17 +2669,30 @@ footer {
       <div class="prog-two-col">
         <div class="reveal">
           <div class="section-label">What is it?</div>
-          <h2 class="editorial-heading" style="margin-bottom:24px">Executive Thinking Under a Time Limit</h2>
-          <p class="body-text" style="margin-bottom:18px">The FFC Case Study Analysis is a high-pressure competitive event that challenges teams to diagnose and solve complex, real-world business problems within a strict timeframe. Participants are judged on their ability to identify underlying issues, analyse root causes with logical precision, and develop strategic solutions that demonstrate both financial awareness and risk control.</p>
-          <p class="body-text">This event serves as a rigorous test of a team's analytical thinking, structured reasoning, and professional presentation skills.</p>
+          <h2 class="section-heading" style="font-size:clamp(36px,5vw,56px);margin-bottom:28px;letter-spacing:-0.5px">Executive<br>Thinking Under<br>a Time Limit</h2>
+          <p class="body-text" style="margin-bottom:20px">The FFC Case Study Analysis is a high-pressure competitive event that challenges teams to diagnose and solve complex, real-world business problems within a strict timeframe.</p>
+          <p class="body-text" style="margin-bottom:20px">Participants are judged on their ability to identify underlying issues, analyse root causes with logical precision, and develop strategic solutions that demonstrate both financial awareness and risk control.</p>
+          <p class="body-text">This event serves as a rigorous test of a team's analytical thinking, structured reasoning, and professional presentation skills — requiring teams to critically evaluate their own proposals to ensure they are both realistic and effective.</p>
         </div>
         <div class="reveal reveal-delay-1">
           <div class="section-label">Scoring Tiers</div>
-          <div class="scoring-grid" style="grid-template-columns:1fr 1fr;margin-top:0">
-            <div class="score-item"><div class="score-num" style="color:var(--gold)">22–25</div><div class="score-label">Gold Level</div></div>
-            <div class="score-item"><div class="score-num" style="color:#b0bec5">18–21</div><div class="score-label">Silver Level</div></div>
-            <div class="score-item"><div class="score-num" style="color:#a5d6a7">14–17</div><div class="score-label">Startup Award</div></div>
-            <div class="score-item"><div class="score-num">+6</div><div class="score-label">Max Bonus Stars</div></div>
+          <div style="margin-top:8px;display:flex;flex-direction:column;gap:2px">
+            <div style="background:var(--navy);padding:24px 28px;display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:var(--font-display);font-weight:900;font-size:36px;color:var(--gold);letter-spacing:-1px">22–25</div>
+              <div style="font-family:var(--font-body);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45)">Gold Level</div>
+            </div>
+            <div style="background:var(--navy-mid);padding:24px 28px;display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:var(--font-display);font-weight:900;font-size:36px;color:#b0bec5;letter-spacing:-1px">18–21</div>
+              <div style="font-family:var(--font-body);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45)">Silver Level</div>
+            </div>
+            <div style="background:var(--navy);padding:24px 28px;display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:var(--font-display);font-weight:900;font-size:36px;color:rgba(255,255,255,0.6);letter-spacing:-1px">14–17</div>
+              <div style="font-family:var(--font-body);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45)">Startup Award</div>
+            </div>
+            <div style="background:var(--royal);padding:24px 28px;display:flex;justify-content:space-between;align-items:center">
+              <div style="font-family:var(--font-display);font-weight:900;font-size:36px;color:white;letter-spacing:-1px">+6</div>
+              <div style="font-family:var(--font-body);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6)">Max Bonus Stars</div>
+            </div>
           </div>
         </div>
       </div>
@@ -2385,7 +2705,7 @@ footer {
       <div class="reveal"><div class="section-label">Official Event Flow</div><h2 class="section-heading" style="margin-bottom:0">How It Works</h2></div>
       <div class="phase-list">
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">01</div><div class="phase-name">Setup</div></div>
+          <div class="phase-label"><div class="phase-num">Phase 01</div><div class="phase-name">Setup</div></div>
           <div class="phase-content">
             <div class="phase-title">Room Requirements</div>
             <div class="phase-detail-list">
@@ -2396,7 +2716,7 @@ footer {
           </div>
         </div>
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">02</div><div class="phase-name">Preparation</div></div>
+          <div class="phase-label"><div class="phase-num">Phase 02</div><div class="phase-name">Preparation</div></div>
           <div class="phase-content">
             <div class="phase-title">35 Minutes of Prep</div>
             <p class="phase-desc">Phase A (5 min): Reading and initial analysis. Research is allowed; writing may begin. Phase B (30 min): Full case study preparation — build your strategy and slides. All devices must be turned off when the timer hits zero, except for the presenting team.</p>
@@ -2407,14 +2727,14 @@ footer {
           </div>
         </div>
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">03</div><div class="phase-name">Presentation</div></div>
+          <div class="phase-label"><div class="phase-num">Phase 03</div><div class="phase-name">Presentation</div></div>
           <div class="phase-content">
             <div class="phase-title">15 Minutes Per Team</div>
             <p class="phase-desc">Each team has 15 minutes to present their analysis. The non-presenting team must remain silent, face the presenters, and refrain from note-taking or further preparation.</p>
           </div>
         </div>
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">04</div><div class="phase-name">Q&amp;A</div></div>
+          <div class="phase-label"><div class="phase-num">Phase 04</div><div class="phase-name">Q&amp;A</div></div>
           <div class="phase-content">
             <div class="phase-title">10 Minutes — 2 Questions</div>
             <div class="phase-detail-list">
@@ -2447,8 +2767,15 @@ footer {
     <div class="prog-inner">
       <div class="section-label reveal">Award</div>
       <div class="award-display reveal">
-        <div class="award-display-name">🏆 The Analytical Excellence Award</div>
-        <p class="award-display-desc">Given to the team that delivers the most well-reasoned and strategic solution to a complex business challenge. Winners are recognised for their ability to analyse, adapt, and provide actionable recommendations under pressure. This award recognises those who think like executives — using logic, insight, and quick reasoning to lead through uncertainty.</p>
+          <div class="award-display-text">
+            <div class="award-display-name">The Analytical Excellence Award</div>
+            <p class="award-display-desc">Given to the team that delivers the most well-reasoned and strategic solution to a complex business challenge. Winners are recognised for their ability to analyse, adapt, and provide actionable recommendations under pressure. This award recognises those who think like executives — using logic, insight, and quick reasoning to lead through uncertainty.</p>
+          </div>
+          <!-- TROPHY IMAGE — file: FFC_award_casestudy_trans.png (transparent background, square) -->
+          <div class="award-display-img">
+            <img src="FFC_award_casestudy_trans.png" alt="Analytical Excellence Award Trophy"
+                 onerror="this.style.display='none'">
+          </div>
       </div>
     </div>
   </section>
@@ -2507,7 +2834,7 @@ footer {
       <div class="reveal"><div class="section-label">Official Event Flow</div><h2 class="section-heading" style="margin-bottom:0">How It Works</h2></div>
       <div class="phase-list">
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">01</div><div class="phase-name">Preparation</div></div>
+          <div class="phase-label"><div class="phase-num">Phase 01</div><div class="phase-name">Preparation</div></div>
           <div class="phase-content">
             <div class="phase-title">2-Hour Development Period</div>
             <p class="phase-desc">Teams gather for a central briefing at the Opening Ceremony where the official challenge theme is introduced. Teams then move to assigned rooms with 3 judges. Documents must be shared with all 3 judges and the Judging Email before preparation begins.</p>
@@ -2524,7 +2851,7 @@ footer {
           </div>
         </div>
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">02</div><div class="phase-name">Presentation</div></div>
+          <div class="phase-label"><div class="phase-num">Phase 02</div><div class="phase-name">Presentation</div></div>
           <div class="phase-content">
             <div class="phase-title">10–30 Minutes Per Team</div>
             <div class="phase-detail-list">
@@ -2536,7 +2863,7 @@ footer {
           </div>
         </div>
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">03</div><div class="phase-name">Q&amp;A</div></div>
+          <div class="phase-label"><div class="phase-num">Phase 03</div><div class="phase-name">Q&amp;A</div></div>
           <div class="phase-content">
             <div class="phase-title">10 Minutes — Strategic Testing</div>
             <div class="phase-detail-list">
@@ -2547,7 +2874,7 @@ footer {
           </div>
         </div>
         <div class="phase-item reveal">
-          <div class="phase-label"><div class="phase-num">04</div><div class="phase-name">Results</div></div>
+          <div class="phase-label"><div class="phase-num">Phase 04</div><div class="phase-name">Results</div></div>
           <div class="phase-content">
             <div class="phase-title">Room Winner Announcement</div>
             <p class="phase-desc">After all presentations, judges calculate scores and announce the winning team in each room. The overall winner across all rooms (highest total stars) is announced at the Closing Ceremony. Total time per team: up to 40 minutes including Q&amp;A.</p>
@@ -2592,8 +2919,15 @@ footer {
     <div class="prog-inner">
       <div class="section-label reveal">Award</div>
       <div class="award-display reveal">
-        <div class="award-display-name">🏆 The Future Founder Trophy</div>
-        <p class="award-display-desc">Presented to the team whose project demonstrates the greatest originality, scalability, and potential for real-world impact. The award honours visionaries who think beyond the present — those shaping tomorrow's innovations and entrepreneurial frontiers. This trophy symbolises imagination with direction, awarded to teams who not only create but also inspire others to dream bigger.</p>
+          <div class="award-display-text">
+            <div class="award-display-name">The Future Founder Trophy</div>
+            <p class="award-display-desc">Presented to the team whose project demonstrates the greatest originality, scalability, and potential for real-world impact. The award honours visionaries who think beyond the present — those shaping tomorrow's innovations and entrepreneurial frontiers. This trophy symbolises imagination with direction, awarded to teams who not only create but also inspire others to dream bigger.</p>
+          </div>
+          <!-- TROPHY IMAGE — file: FFC_award_innovators_trans.png (transparent background, square) -->
+          <div class="award-display-img">
+            <img src="FFC_award_innovators_trans.png" alt="Future Founder Trophy"
+                 onerror="this.style.display='none'">
+          </div>
       </div>
     </div>
   </section>
@@ -2627,8 +2961,10 @@ footer {
   <section class="founder-section">
     <div class="founder-inner">
       <div class="reveal">
-        <div class="founder-avatar">DC</div>
-        <!-- REPLACE with: <img src="darren-photo.jpg" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid var(--accent)"> -->
+        <!-- FOUNDER PHOTO — file: Darren.png -->
+        <img src="Darren.png" alt="Darren Chan — Founder & Executive Director"
+             class="founder-avatar"
+             onerror="this.outerHTML='<div class=\'founder-avatar\' style=\'background:var(--royal);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:40px;font-weight:800;color:white\'>DC</div>'">
       </div>
       <div class="reveal reveal-delay-1">
         <div class="founder-quote">"Welcome to the Future Founders' Challenge. This competition was created with a simple but powerful goal: to inspire students to think like innovators, entrepreneurs, and future leaders. I encourage every participant to approach this competition with curiosity, creativity, and courage. The goal is not only to win, but to grow."</div>
@@ -2644,7 +2980,7 @@ footer {
       <div class="history-timeline">
         <div class="timeline-item reveal">
           <div class="timeline-period">Feb – Apr</div>
-          <div class="timeline-content"><div class="timeline-title">Preparations &amp; Training</div><p class="timeline-desc">Launch of Thursday ECAs to train students in case studies, Shark Tank pitching, and speech debates. Development of the FFC Guidebook, branding, and judging rubrics. Internal POWIIS mock competitions to test logistics and prepare students.</p></div>
+          <div class="timeline-content"><div class="timeline-title">Preparations &amp; Training</div><p class="timeline-desc">Launch of Thursday ECAs to train students in case studies and business debates. Development of the FFC Guidebook, branding, and judging rubrics. Internal POWIIS mock competitions to test logistics and prepare students.</p></div>
         </div>
         <div class="timeline-item reveal">
           <div class="timeline-period">May – Jul</div>
@@ -2730,7 +3066,7 @@ footer {
             <div class="faq-q-text">What awards are available?</div>
             <div class="faq-toggle">+</div>
           </div>
-          <div class="faq-answer">FFC offers event-specific awards (Market Persuaders Award, Analytical Excellence Award, Future Founder Trophy, Profit Pioneer Cup), a Startup Award (Honourable Mention), and the Titan of Industry Award for the overall best team across all events.</div>
+          <div class="faq-answer">FFC offers event-specific awards (Market Persuaders Award, Analytical Excellence Award, Future Founder Trophy), a Startup Award (Honourable Mention), and the Titan of Industry Award for the overall best team across all events.</div>
         </div>
         <div class="faq-item reveal">
           <div class="faq-question" onclick="toggleFaq(this)">
